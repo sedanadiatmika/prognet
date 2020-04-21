@@ -9,9 +9,12 @@
 </head>
 <body>
 <form>
-Email anda sudah terverifikasi
-Klik link berikut untuk login
-<a href="login">LINK</a>
+
+<div class="verif">
+<p>Email anda sudah terverifikasi</p>
+<p>Klik <a href="login">link</a> berikut untuk login</p>
+</div>
+
 </form>
 </body>
 </html>

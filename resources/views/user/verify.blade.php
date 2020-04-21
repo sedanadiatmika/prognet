@@ -9,10 +9,10 @@
 <body>
 <form action="{{ url('register') }}" method="POST" enctype="multipart/form-data">
 
+<div class="verif">
 <p>Silahkan verifikasi email terlebih dahulu untuk login</p>
-<p>Klik link berikut apabila email verifikasi belum terkirim</p>
-<a href="/verifyagain">LINK</a>
-
+<p>Klik <a href="/verifyagain">link</a> berikut apabila email verifikasi belum terkirim</p>
+</div>
 
 </form>
 </body>
