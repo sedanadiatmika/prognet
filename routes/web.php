@@ -23,7 +23,7 @@ Route::prefix('admin')->group(function(){
     Route::get('/logout','adminController@logoutadmin');
     Route::get('/dashboard', 'admincontroller@dashboard')->middleware('loginadmin');
     Route::get('/registration_success','adminController@adminreg');
-});
+}); 
 
 Route::prefix('')->group(function() {
     Route::get('/login','userController@userlogin');
@@ -45,5 +45,11 @@ Route::prefix('')->group(function() {
 
     Route::get('/verifyagain','userController@sendagain');
 });
+
+Route::resource('/products', 'ProductsController');
+Route::resource('/category', 'CategoryController');
+Route::resource('/courier', 'CourierController');
+
+
 
 
