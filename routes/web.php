@@ -22,8 +22,11 @@ Route::prefix('admin')->group(function(){
     Route::post('/register','adminController@registersubmit');
     Route::get('/logout','adminController@logoutadmin');
     Route::get('/dashboard', 'admincontroller@dashboard')->middleware('loginadmin');
+    Route::resource('/products', 'ProductsController')->middleware('loginadmin');;
+    Route::resource('/category', 'CategoryController')->middleware('loginadmin');;
+    Route::resource('/courier', 'CourierController')->middleware('loginadmin');;
     Route::get('/registration_success','adminController@adminreg');
-});
+}); 
 
 Route::prefix('')->group(function() {
     Route::get('/login','userController@userlogin');
@@ -45,5 +48,9 @@ Route::prefix('')->group(function() {
 
     Route::get('/verifyagain','userController@sendagain');
 });
+
+
+
+
 
 

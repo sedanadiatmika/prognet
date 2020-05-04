@@ -105,14 +105,10 @@ form {
 }
 
 html {
-    background:	#333333	;
-    zoom: 0.9;
+    background:	#005073	;
 }
 
 ::placeholder {
     color: red;
 }
 
-.verif {
-    text-align: center;
-}
