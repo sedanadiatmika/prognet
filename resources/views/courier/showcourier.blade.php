@@ -22,6 +22,6 @@
 			</p>
 
 			<p>
-				<input type="button" value="Kembali" onclick="location.href='/courier'">
+				<input type="button" value="Kembali" onclick="location.href='/admin/courier'">
 			</p>
 		@endsection	

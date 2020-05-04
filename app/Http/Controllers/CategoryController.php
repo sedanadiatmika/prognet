@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $category = new category();
         $category->category_name=$request->category_name;
         $category->save();
-        return redirect('category');
+        return redirect('/admin/category');
     }
 
     /**
@@ -79,7 +79,7 @@ class CategoryController extends Controller
         $category= category::where("id",$id)->first();
         $category->category_name=$request->category_name;
         $category->save();
-        return redirect('/category');
+        return redirect('/admin/category');
     }
 
     /**
@@ -92,6 +92,6 @@ class CategoryController extends Controller
     {
         $category= category::find($id);
         $category->delete();
-        return redirect('/category');
+        return redirect('/admin/category');
     }
 }

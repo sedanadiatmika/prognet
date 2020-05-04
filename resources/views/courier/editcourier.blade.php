@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<form action="/courier/{{$courier->id}}" method="POST">
+			<form action="/admin/courier/{{$courier->id}}" method="POST">
 				@csrf
 				@method('PUT')
 				<p>

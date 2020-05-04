@@ -46,7 +46,7 @@ class ProductsController extends Controller
             $products->stock = $request->stock;
             $products->weight = $request->weight;
 	        $products->save();
-	        return redirect('products');
+	        return redirect('/admin/products');
     }
 
     /**
@@ -90,7 +90,7 @@ class ProductsController extends Controller
         $products->stock = $request->stock;
         $products->weight = $request->weight;
 		$products->save();
-		return redirect('/products');
+		return redirect('/admin/products');
     }
 
     /**
@@ -103,6 +103,6 @@ class ProductsController extends Controller
     {
         $products= products::find($id);
         $products->delete();
-        return redirect('/products');
+        return redirect('/admin/products');
     }
 }

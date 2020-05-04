@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<form action="/courier" method="POST">
+			<form action="/admin/courier" method="POST">
 				@csrf
 
                 

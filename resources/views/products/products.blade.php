@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<input type="button" value="Tambah Products Baru" onclick="location.href='/products/create'">
+			<input type="button" value="Tambah Products Baru" onclick="location.href='/admin/products/create'">
 			<br>
 			@if($all_products->isEmpty())
 				Belum ada data ...
@@ -34,13 +34,13 @@
                         <td>{{$products->weight}}</td>
 						<td>
 							<span>
-								<input type="button" value="Edit" onclick="location.href='/products/{{$products->id}}/edit'">
-								<form style="display:inline-block;" action="/products/{{$products->id}}" method="post">
+								<input type="button" value="Edit" onclick="location.href='/admin/products/{{$products->id}}/edit'">
+								<form style="display:inline-block;" action="/admin/products/{{$products->id}}" method="post">
 									@csrf
 									@method('DELETE')
 									<input type="submit" value="Delete">
 								</form>
-								<input type="button" value="Details" onclick="location.href='/products/{{$products->id}}'">
+								<input type="button" value="Details" onclick="location.href='/admin/products/{{$products->id}}'">
 							</span>
 						</td>
 					</tr>

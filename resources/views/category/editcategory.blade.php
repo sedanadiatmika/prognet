@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<form action="/category/{{$category->id}}" method="POST">
+			<form action="/admin/category/{{$category->id}}" method="POST">
 				@csrf
 				@method('PUT')
 				<p>

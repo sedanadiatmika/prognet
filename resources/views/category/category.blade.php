@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<input type="button" value="Tambah Kategori Baru" onclick="location.href='/category/create'">
+			<input type="button" value="Tambah Kategori Baru" onclick="location.href='/admin/category/create'">
 			<br>
 			@if($all_category->isEmpty())
 				Belum ada data ...
@@ -24,13 +24,13 @@
 						<td>{{$category->category_name}}</td>
 						<td>
 							<span>
-								<input type="button" value="Edit" onclick="location.href='/category/{{$category->id}}/edit'">
-								<form style="display:inline-block;" action="/category/{{$category->id}}" method="post">
+								<input type="button" value="Edit" onclick="location.href='/admin/category/{{$category->id}}/edit'">
+								<form style="display:inline-block;" action="/admin/category/{{$category->id}}" method="post">
 									@csrf
 									@method('DELETE')
 									<input type="submit" value="Delete">
 								</form>
-								<input type="button" value="Details" onclick="location.href='/category/{{$category->id}}'">
+								<input type="button" value="Details" onclick="location.href='/admin/category/{{$category->id}}'">
 							</span>
 						</td>
 					</tr>

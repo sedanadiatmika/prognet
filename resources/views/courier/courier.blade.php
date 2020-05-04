@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<input type="button" value="Tambah Kurir Baru" onclick="location.href='/courier/create'">
+			<input type="button" value="Tambah Kurir Baru" onclick="location.href='/admin/courier/create'">
 			<br>
 			@if($all_courier->isEmpty())
 				Belum ada data ...
@@ -24,13 +24,13 @@
 						<td>{{$courier->courier}}</td>
 						<td>
 							<span>
-								<input type="button" value="Edit" onclick="location.href='/courier/{{$courier->id}}/edit'">
-								<form style="display:inline-block;" action="/courier/{{$courier->id}}" method="post">
+								<input type="button" value="Edit" onclick="location.href='/admin/courier/{{$courier->id}}/edit'">
+								<form style="display:inline-block;" action="/admin/courier/{{$courier->id}}" method="post">
 									@csrf
 									@method('DELETE')
 									<input type="submit" value="Delete">
 								</form>
-								<input type="button" value="Details" onclick="location.href='/courier/{{$courier->id}}'">
+								<input type="button" value="Details" onclick="location.href='/admin/courier/{{$courier->id}}'">
 							</span>
 						</td>
 					</tr>

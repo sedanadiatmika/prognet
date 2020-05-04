@@ -40,7 +40,7 @@ class CourierController extends Controller
         $courier = new courier();
         $courier->courier = $request->courier;
         $courier->save();
-        return redirect('courier');
+        return redirect('/admin/courier');
     }
 
     /**
@@ -79,7 +79,7 @@ class CourierController extends Controller
         $courier = courier::where("id",$id)->first();
         $courier->courier = $request->courier;
         $courier->save();
-        return redirect('/courier');
+        return redirect('/admin/courier');
     }
 
     /**
@@ -92,6 +92,6 @@ class CourierController extends Controller
     {
         $courier = courier::find($id);
         $courier->delete();
-        return redirect('/courier');
+        return redirect('/admin/courier');
     }
 }

@@ -7,7 +7,7 @@
 		@endsection
 
 		@section('konten')
-			<form action="/products" method="POST">
+			<form action="/admin/products" method="POST">
 				@csrf
 
                 
@@ -37,7 +37,7 @@
 				</p>
 				<p>
 					<input type="submit" value="Simpan">
-					<input type="button" value="Kembali" onclick="location.href='/products'">
+					<input type="button" value="Kembali" onclick="location.href='/admin/products'">
 				</p>
 			</form>
 		@endsection
