@@ -1,16 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
-    {{ "Selamat datang ".Auth::guard('admin')->user()->name }}
-    <br>
-    <a href="{{ url('admin/logout') }}">
-        <button>
-            Logout
-        </button>
-    </a>
-</body>
-</html>
+@extends('layout.app')
+
+		@section('title','CRUD Produk')
+
+		@section('judul')
+			Detail Data Produk
+		@endsection
+
+        @section('konten')
+        
+        <div class="main">
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{ "Selamat datang ".Auth::guard('admin')->user()->name }}</h3>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+        
+		@endsection	
