@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\category;
+use App\Category;
 use Illuminate\Http\Request;
-use DB;
+use Redirect;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+       $this->middleware(['auth:admin','authAdmin:admin']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +20,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $all_category = category::get();
-        return view('category/category', compact('all_category'));
+        $categories['categories'] = Category::orderby('id','desc')->paginate(5);
+        return view('category.home', $categories);
     }
 
     /**
@@ -26,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category/newcategory');
+        return view('category.create');
     }
 
     /**
@@ -37,61 +42,124 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new category();
-        $category->category_name=$request->category_name;
+         $messages = [
+            'required' => ':attribute Wajib Diisi',
+            'max' => ':attribute Harus Diisi maksimal :max karakter',
+            'min' => ':attribute Harus Diisi minimum :min karakter',
+            'string' => ':attribute Hanya Diisi Huruf dan Angka',
+            'confirmed' => ':attribute Konfirmasi Password Salah',
+            'unique' => ':attribute Username sudah ada',
+            'email' => 'attribute Format Email Salah',
+        ];
+
+        $this->validate($request,[
+            'category_name' => 'required|unique:categories|max:100',
+        ],$messages);
+
+        $category = new Category;
+        $category->category_name = $request->category_name;
         $category->save();
-        return redirect('/admin/category');
+        return Redirect::to('categories');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\category  $category
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = category::where("id",$id)->first();
-        return view('category/showcategory', compact('category'));
+        return view('category.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\category  $category
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $category = category::where("id",$id)->first();
-        return view('category/editcategory', compact('category'));
+        $where = array('id' => $id);
+        $data['category'] = Category::where($where)->first();
+        return view('category.edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\category  $category
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $category= category::where("id",$id)->first();
-        $category->category_name=$request->category_name;
-        $category->save();
-        return redirect('/admin/category');
+        $messages = [
+            'required' => ':attribute Wajib Diisi',
+            'max' => ':attribute Harus Diisi maksimal :max karakter',
+            'min' => ':attribute Harus Diisi minimum :min karakter',
+            'string' => ':attribute Hanya Diisi Huruf dan Angka',
+            'confirmed' => ':attribute Konfirmasi Password Salah',
+            'unique' => ':attribute Username sudah ada',
+            'email' => 'attribute Format Email Salah',
+        ];
+
+        $this->validate($request,[
+            'category_name' => 'required|max:100',
+        ],$messages);
+
+        $update = [
+            'category_name' => $request->category_name,
+        ];
+        Category::where('id', $id)->update($update);
+        return Redirect::to('categories');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\category  $category
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $category= category::find($id);
-        $category->delete();
-        return redirect('/admin/category');
+        Category::where('id', $id)->delete();
+        return Redirect::to('categories');
+    }
+
+    public function soft_delete($id){
+        $categories = category::find($id);
+        $categories->delete();
+        return Redirect::to('categories');
+    }
+
+    public function trash(){
+        $categories['categories'] = DB::table('categories')->where('deleted_at','!=',NULL)->orderby('id','desc')->paginate(5);
+        return view('category.trash', $categories);
+    }
+
+    public function restore($id){
+        $categories = Category::onlyTrashed()->where('id',$id);
+        $categories->restore();
+        return Redirect::to('categories-trash');
+    }
+
+    public function restore_all(){
+        $categories = Category::onlyTrashed();
+        $categories->restore();
+        return Redirect::to('categories-trash');   
+    }
+
+    public function delete($id){
+        $categories = Category::onlyTrashed()->where('id', $id);
+        $categories->forceDelete();
+        return Redirect::to('categories-trash');
+    }
+
+    public function delete_all($id){
+        $categories = Category::onlyTrashed();
+        $categories->forceDelete();
+        return Redirect::to('categories-trash');
     }
 }

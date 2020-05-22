@@ -3,147 +3,91 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\admin;
-use Illuminate\Support\Facades\Hash;
-use Validator;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Transaction;
 
-class adminController extends Controller
+class AdminController extends Controller
 {
-    public function registeradmin(){
-        return view('admin/tampilanregister');
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth:admin','authAdmin:admin']);
     }
 
-    public function registersubmit(Request $request){
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return view('admin.home');
+    }
 
-        $validator = Validator::make(request()->all(),[
-            'name' => 'required|min:6|max:30|unique:admins,name',
-            'phone' => 'required|max:12|unique:admins,phone',
-            'username' => 'required|min:6|max:30|unique:admins,username',
-            'password' => 'min:8|required_with:password_confirmation',
-            'file' => 'required|max:700',
-            'password_confirmation' => 'required|min:8|
-            same:password'
-        ],
-            [
-                'name.required'=>'Nama tidak boleh kososng',
-                'name.max'=>'Nama maksimal 30 karakter',
-                'name.min'=>'Nama minimal 6 karakter',
-                'name.unique'=>'Nama sudah digunakan',
-                'phone.required'=>'Nomor telepon tidak boleh kosong',
-                'phone.numeric'=>'Nomor telepon dalam bentuk angka',
-                'phone.min'=>'Nomor telepon minimal 12 karakter',
-                'phone.max'=>'Nomor telepon maksimal 12 karakter',
-                'phone.unique'=>'Nomor telepon sudah digunakan',
-                'username.required'=>'Username tidak boleh kososng',
-                'username.max'=>'Username maksimal 30 karakter',
-                'username.min'=>'Username minimal 6 karakter',
-                'username.unique'=>'Username sudah digunakan',
-                'email.required'=>'Email tidak boleh kosong',
-                'email.email'=>'Format email salah',
-                'email.unique'=>'Email sudah digunakan',
-                'status.required'=>'Status tidak boleh kosong',
-                'status.min'=>'Status minimal 3 karakter',
-                'status.max'=>'Status maksimal 20 karakter',
-                'password.required_with'=>'Password tidak boleh kosong',
-                'password.min'=>'Password minimal 8 karakter',
-                'file.required'=>'File tidak boleh kosong',
-                'file.max'=>'File maksimal 700 KB',
-                'password_confirmation.required'=>'Ulangi password tidak boleh kosong',
-                'password_confirmation.min'=>'Ulangi password minimal 8 karakter',
-                'password_confirmation.same'=>'Ulangi password tidak sama'
-            ]);
+    public function orderNew(){
+        $status = "UNVERIFIED";
+        $transactions = DB::table('transactions')
+            ->join('users', 'users.id', '=', 'transactions.user_id')
+            ->select('transactions.*', 'users.name')
+            ->where('transactions.status', '=', 'unverified')
+            ->orderby('transactions.date_order', 'desc')->paginate(10);
+        return view('admin.cek_order', compact('transactions', 'status'));
+    }
 
-        if ($validator->fails()) {
-            return redirect('admin/register')->withErrors($validator->errors());
-        } else {
+    public function orderProces(){
+        $status = "VERIFIED DAN DELIVERED";
+        $transactions = DB::table('transactions')
+            ->join('users', 'users.id', '=', 'transactions.user_id')
+            ->select('transactions.*', 'users.name')
+            ->where('transactions.status', '=', 'verified')
+            ->orWhere('transactions.status', '=', 'delivered')
+            ->orderby('transactions.date_order', 'desc')->paginate(10);
+        return view('admin.cek_order', compact('transactions', 'status'));
+    }
 
-            $file = $request->file('file');
-            $tujuan = 'fotoadmin\\';
-            $disimpan = $tujuan . $file->getClientOriginalName();
-            $file->move($tujuan, $file->getClientOriginalName());
+    public function orderSuccess(){
+        $status = "SUCCESS";
+        $transactions = DB::table('transactions')
+            ->join('users', 'users.id', '=', 'transactions.user_id')
+            ->select('transactions.*', 'users.name')
+            ->where('transactions.status', '=', 'success')
+            ->orderby('transactions.date_order', 'desc')->paginate(10);
+        return view('admin.cek_order', compact('transactions', 'status'));
+    }
 
+    public function orderCancel(){
+        $status = "CANCELED AND EXPIRED";
+        $transactions = DB::table('transactions')
+            ->join('users', 'users.id', '=', 'transactions.user_id')
+            ->select('transactions.*', 'users.name')
+            ->where('transactions.status', '=', 'canceled')
+            ->orWhere('transactions.status', '=', 'expired')
+            ->orderby('transactions.date_order', 'desc')->paginate(10);
+        return view('admin.cek_order', compact('transactions', 'status'));
+    }
 
-            $new = new admin;
-            $new->name = $request->name;
-            $new->phone = $request->phone;
-            $new->password = Hash::make($request->password);
-            $new->username = $request->username;
-            $new->profile_image = $disimpan;
-            $new->save();
+    public function orderDetail($id){
+        $transaction = DB::table('transactions')
+        ->join('users', 'users.id', '=', 'transactions.user_id')
+        ->select('transactions.*', 'users.name')
+        ->where('transactions.id', '=', $id)->first();
+        return view('admin.edit_status_order', compact('transaction'));
+    }
 
-            return redirect('admin/registration_success');
+    public function orderUpdate(Request $request, $id){
+        $transaction = Transaction::find($id);
+        $transaction->status = $request->status;
+        $transaction->save();
+        if ($request->status=='unverified') {
+            return redirect('admin/order/new')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
+        }elseif($request->status=='canceled'){
+            return redirect('admin/order/cancel')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
+        }else{
+            return redirect('admin/order/process')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
         }
-    }
-
-    public function loginadmin(){
-
-            return view('admin/tampilanlogin');
-
-    }
-
-    public function loginsubmit(Request $request){
-
-        $validator = Validator::make(request()->all(),[
-            'username' => 'required|min:6|max:30|',
-            'password' => 'min:8'
-        ],
-            [
-                'name.required'=>'Nama tidak boleh kososng',
-                'name.max'=>'Nama maksimal 30 karakter',
-                'name.min'=>'Nama minimal 6 karakter',
-                'name.unique'=>'Nama sudah digunakan',
-                'phone.required'=>'Nomor telepon tidak boleh kosong',
-                'phone.numeric'=>'Nomor telepon dalam bentuk angka',
-                'phone.min'=>'Nomor telepon minimal 12 karakter',
-                'phone.max'=>'Nomor telepon maksimal 13 karakter',
-                'phone.unique'=>'Nomor telepon sudah digunakan',
-                'username.required'=>'Username tidak boleh kososng',
-                'username.max'=>'Username maksimal 30 karakter',
-                'username.min'=>'Username minimal 6 karakter',
-                'username.unique'=>'Username sudah digunakan',
-                'email.required'=>'Email tidak boleh kosong',
-                'email.email'=>'Format email salah',
-                'email.unique'=>'Email sudah digunakan',
-                'status.required'=>'Status tidak boleh kosong',
-                'status.min'=>'Status minimal 3 karakter',
-                'status.max'=>'Status maksimal 20 karakter',
-                'password.required_with'=>'Password tidak boleh kosong',
-                'password.same'=>'Password berbeda',
-                'password.min'=>'Password minimal 8 karakter',
-                'file.required'=>'File tidak boleh kosong',
-                'file.max'=>'File maksimal 700 KB',
-                'password_confirmation.required'=>'Ulangi password tidak boleh kosong',
-                'password_confirmation.min'=>'Ulangi password minimal 8 karakter'
-            ]);
-
-        if ($validator->fails()) {
-            return redirect('admin/login')->withErrors($validator->errors());
-        } else {
-
-            $data = $request->only('username', 'password');
-            if (Auth::guard('admin')->attempt($data)) {
-                return redirect('admin/dashboard');
-            } else {
-                return "username atau password salah";
-            }
-        }
-    }
-
-    public function dashboard(){
-        return view('admin/dashboard');
-    }
-
-    public function logoutadmin(){
-        if(Auth::guard('admin')->check()){
-            Auth::guard('admin')->logout();
-        }
-
-        return redirect('/admin/login');
-    }
-
-    public function adminreg(){
-        return view('admin/registersukses');
     }
 }

@@ -2,158 +2,205 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\verifyuser;
 use Illuminate\Http\Request;
+use App\Product;
+use App\Category;
 use App\User;
-use Illuminate\Support\Facades\Hash;
-use Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use \Mail;
-use Illuminate\Support\Facades\DB;
-use Session;
-
-
-class userController extends Controller
+use App\Cart;
+use App\Discount;
+use DB;
+use Auth;
+use App\Transaction;
+class UserController extends Controller
 {
-    public function userregister(){
-        return view('user/registeruser');
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $products = DB::table('products')->orderby('products.id', 'desc')->paginate(9);
+        $title = "HOME";
+        $count_product = DB::table('products')->where('products.deleted_at', '=', NULL)->count('products.id');
+        $product_carts = DB::table('carts')
+                    ->join('products', 'products.id', '=', 'carts.product_id')
+                    ->join('users', 'users.id', '=', 'carts.user_id')
+                    ->select('products.*', 'carts.qty', 'carts.id AS cart_id')
+                    ->where('carts.deleted_at', '=', null)
+                    ->where('carts.user_id', '=', Auth::user()->id)->get();
+        $product_images = DB::table('product_images')->select('product_images.*')->get();
+        $categories = DB::table('categories')->select('categories.*')->get();
+        $discounts = Discount::where('discounts.end', '>', date('Y-m-d'))->get();
+        return view('user.home', compact('products', 'product_carts', 'product_images', 'categories', 'discounts', 'title', 'count_product'));
     }
 
-    public function registersubmit(Request $request){
-
-        $validator = Validator::make(request()->all(),[
-           'name' => 'required|min:6|max:30|unique:users,name',
-           'email' => 'required|email|unique:users,email',
-           'status' => 'required|min:3|max:20',
-           'password' => 'min:8|required_with:password_confirmation',
-           'file' => 'required|max:700',
-           'password_confirmation' => 'required|min:8|same:password'
-        ],
-            [
-                'name.required'=>'Username tidak boleh kososng',
-                'name.max'=>'Username maksimal 30 karakter',
-                'name.min'=>'Username minimal 6 karakter',
-                'name.unique'=>'Username sudah digunakan',
-                'email.required'=>'Email tidak boleh kosong',
-                'email.email'=>'Format email salah',
-                'email.unique'=>'Email sudah digunakan',
-                'status.required'=>'Status tidak boleh kosong',
-                'status.min'=>'Status minimal 3 karakter',
-                'status.max'=>'Status maksimal 20 karakter',
-                'password.required_with'=>'Password tidak boleh kosong',
-                'password.same'=>'Password berbeda',
-                'password.min'=>'Password minimal 8 karakter',
-                'file.required'=>'File tidak boleh kosong',
-                'file.max'=>'File maksimal 700 KB',
-                'password_confirmation.required'=>'Ulangi password tidak boleh kosong',
-                'password_confirmation.min'=>'Ulangi password minimal 8 karakter',
-                'password_confirmation.same'=>'Password berbeda'
-            ]);
-
-        if ($validator->fails()){
-            return redirect('/register')->withErrors($validator->errors());
-
-        } else {
-
-            $file = $request->file('file');
-            $tujuan = 'fotouser\\';
-            $disimpan = $tujuan . $file->getClientOriginalName();
-            $file->move($tujuan, $file->getClientOriginalName());
-
-            $new = new User;
-            $new->name = $request->name;
-            $new->email = $request->email;
-            $new->password = Hash::make($request->password);
-            $new->status = $request->status;
-            $new->profile_image = $disimpan;
-            Session::put('user',$new->name);
-            Session::put('email',$new->email);
-            $email = $new->email;
-            $name = $new->name;
-            $data = array("email" => $email, "name" => $name);
-            $new->save();
-
-            Mail::to($request->email)->send(new verifyuser($data));
-
-            return redirect('verify');
-        }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
-    public function userlogin(){
-        return view('user/loginuser');
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
     }
 
-    public function loginsubmit(Request $request){
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $product = Product::find($id);
+        $images = DB::table('product_images')
+                ->join('products', 'products.id', '=', 'product_images.product_id')
+                ->select('product_images.image_name')
+                ->where('products.id', '=', $id)->get();
+        $sum_image = DB::table('product_images')->where('product_images.product_id', '=', $id)
+                            ->count('product_images.id');
+        $product_carts = DB::table('carts')
+                    ->join('products', 'products.id', '=', 'carts.product_id')
+                    ->join('users', 'users.id', '=', 'carts.user_id')
+                    ->select('products.*', 'carts.qty', 'carts.id AS cart_id')
+                    ->where('carts.deleted_at', '=', null)
+                    ->where('carts.user_id', '=', Auth::user()->id)->get();
+        $image_carts = DB::table('product_images')->select('product_images.*')->get();
+        $categories = DB::table('categories')->select('categories.*')->get();
+        $discount = Discount::where('id_product', '=', $id)->orderby('end', 'desc')->first();
 
-        $validator = Validator::make(request()->all(),[
-            'name' => 'required|min:6|max:30',
-            'password' => 'required|min:8'
-        ],
-            [
-                'name.required'=>'Username tidak boleh kososng',
-                'name.max'=>'Username maksimal 30 karakter',
-                'name.min'=>'Username minimal 6 karakter',
-                'name.unique'=>'Username sudah digunakan',
-                'email.required'=>'Email tidak boleh kosong',
-                'email.email'=>'Format email salah',
-                'email.unique'=>'Email sudah digunakan',
-                'status.required'=>'Status tidak boleh kosong',
-                'status.min'=>'Status minimal 3 karakter',
-                'status.max'=>'Status maksimal 20 karakter',
-                'password.required'=>'Password tidak boleh kosong',
-                'password.same'=>'Password berbeda',
-                'password.min'=>'Password minimal 8 karakter',
-                'file.required'=>'File tidak boleh kosong',
-                'file.max'=>'File maksimal 700 KB',
-                'password_confirmation.required'=>'Ulangi password tidak boleh kosong',
-                'password_confirmation.min'=>'Ulangi password minimal 8 karakter'
-            ]);
+        $reviews = DB::table('product_reviews')->join('products', 'products.id', '=', 'product_reviews.product_id')
+                ->join('users', 'users.id', '=', 'product_reviews.user_id')
+                ->select('product_reviews.*', 'users.name')
+                ->where('products.id', '=', $id)->orderby('product_reviews.id', 'desc')->get();
+        $response = DB::table('response')->join('product_reviews', 'product_reviews.id', '=', 'response.review_id')
+                ->join('admins', 'admins.id', '=', 'response.admin_id')
+                ->select('admins.name', 'response.*')->get();
 
-        if ($validator->fails()) {
-            return redirect('login')->withErrors($validator->errors());
-        } else {
-
-            $data = $request->only('name', 'password');
-            if (Auth::guard('user')->attempt($data)) {
-                return redirect('dashboard');
-
-            } else {
-                return "username atau password salah";
-            }
-        }
+        return view('user.product_detail', compact('product', 'images', 'sum_image', 'id', 'product_carts', 'image_carts', 'categories', 'discount','reviews', 'response'));
     }
 
-    public function dashboard(){
-        return view('user/dashboard');
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
-    public function logout(){
-        if(Auth::guard('user')->check()){
-            Auth::guard('user')->logout();
-        }
-        return redirect('login');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
     }
 
-    public function verifyemailuser($email){
-        $veri = DB::statement('UPDATE users SET users.`email_verified_at`=NOW()
-        WHERE users.email = ?',array($email));
-
-        return redirect('verifysuccess');
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 
-    public function sendagain(){
-        $email = Session::get('email');
-        $name = Session::get('user');
-        $data = array("email" => $email, "name"=>$name);
-
-        Mail::to($email)->send(new verifyuser($data));
-        return redirect()->back();
+    public function invoice($id){
+        $transactions = DB::table('transactions')->select('transactions.*')->where('transactions.user_id', '=', $id)
+        ->orderby('id', 'desc')->paginate(10);
+        return view('user.invoice', compact('transactions'));
     }
 
-    public function verifyemailsuccess(){
-        return view('user/verifysuccess');
-
+    public function getInvoice($id){
+        $transaction = DB::table('transactions')->select('transactions.*')->where('transactions.id', '=', $id)->first();
+        $products = DB::table('transaction_details')->join('products', 'products.id', '=', 'transaction_details.product_id')
+                    ->select('transaction_details.*', 'products.weight', 'products.product_name')
+                    ->where('transaction_details.transaction_id', '=', $transaction->id)->get();
+        $reviews = DB::table('product_reviews')->select('product_reviews.*')->where('product_reviews.transaction_id', '=', $id)->get();
+        return view('user.invoice_detail', compact('transaction', 'products', 'reviews'));
     }
 
+    public function search_category(Request $request){
+        $product_images = DB::table('product_images')->select('product_images.*')->get();
+        $categories = DB::table('categories')->select('categories.*')->get();
+        $discounts = Discount::where('discounts.end', '>', date('Y-m-d'))->get();
+        $title = "HASIL PENCARIAN";
+        $products = DB::table('products')
+                    ->join('product_category_details', 'products.id', 'product_category_details.product_id')
+                    ->join('categories', 'categories.id', 'product_category_details.category_id')
+                    ->select('products.*')->where('products.category', '=', $request->kind)
+                    ->where('categories.id', '=', $request->category)
+                    ->where('product_category_details.deleted_at', '=', NULL)
+                    ->orderby('products.id', 'desc')->paginate(9);
+        $count_product = DB::table('products')
+                    ->join('product_category_details', 'products.id', 'product_category_details.product_id')
+                    ->join('categories', 'categories.id', 'product_category_details.category_id')
+                    ->where('categories.id', '=', $request->category)
+                    ->where('product_category_details.deleted_at', '=', NULL)
+                    ->count('products.id');
+        return view('user.home', compact('products', 'product_images', 'categories', 'discounts', 'title', 'count_product'));
+    }
+
+    public function uploadPOP(Request $request, $id){
+        $image = $request->proof_of_payment;
+        $nama_image = time()."_".$image->getClientOriginalName();
+        $folder = 'image/proof_of_payment';
+        $image->move($folder,$nama_image);
+        $transaction = Transaction::find($id);
+        $transaction->proof_of_payment = $nama_image;
+        $transaction->save();
+        return redirect()->back()->with(['notif' => "Bukti Pembayaran telah Diupload"]);
+    }
+
+    public function search(Request $request){
+        $product_images = DB::table('product_images')->select('product_images.*')->get();
+        $categories = DB::table('categories')->select('categories.*')->get();
+        $discounts = Discount::where('discounts.end', '>', date('Y-m-d'))->get();
+        $title = "HASIL PENCARIAN";
+        $products = DB::table('products')
+                        ->select('products.*')
+                        ->where('products.product_name', 'LIKE', '%'.$request->search.'%')
+                        ->orderby('products.id', 'desc')->paginate(9);
+        $count_product = DB::table('products')->where('products.product_name', 'LIKE', '%'.$request->search.'%')->count('products.id');
+        return view('user.home', compact('products', 'product_images', 'categories', 'discounts', 'title', 'count_product'));
+    }
+
+    public function confirmation($id){
+        $transaction = Transaction::find($id);
+        $transaction->status = "success";
+        $transaction->save();
+        return redirect()->back()->with(['notif' => "Terima Kasih Telah Berbelanja"]);
+    }
+
+    public function cancel_transaction($id){
+        $transaction = Transaction::find($id);
+        $transaction->status = "canceled";
+        $transaction->save();
+        return redirect()->back()->with(['notif' => "Transaksi telah dibatalkan"]);
+    }
 }

@@ -2,22 +2,24 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class admin extends Authenticatable
+class Admin extends Authenticatable 
 {
+    use Notifiable;
+    
     protected $guard = 'admin';
-    protected $table = 'admins';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'username', 'password',
+        'name', 'username' ,'profile_image','phone', 'password',
     ];
+
+    
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -26,4 +28,10 @@ class admin extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
 }
