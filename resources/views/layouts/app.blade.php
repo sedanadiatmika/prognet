@@ -15,9 +15,9 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}">
 </head>
-<body>
+<body style="background-color: #333333" class="text-white">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     
