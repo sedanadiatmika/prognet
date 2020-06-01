@@ -46,10 +46,10 @@
     </div>
   </div>
 </div>
-<section class="single_product_details_area d-flex align-items-center">
+<section style="background-color: #333333" class="single_product_details_area d-flex align-items-center">
 
         <!-- Single Product Thumb -->
-        <div class="single_product_thumb clearfix">
+        <div  class="single_product_thumb clearfix">
         	@if($sum_image > 1)
             <div class="product_thumbnail_slides owl-carousel" style="height: 65%; width: 65%;">
                 @foreach($images as $item)
@@ -74,7 +74,7 @@
          ?>
         <!-- Single Product Description -->
         <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
-            <div class="order-details-confirmation">
+            <div style="background-color: white" class="order-details-confirmation rounded">
                 <div class="cart-page-heading">
                     <h5>Detail Produk</h5>
                     </div>
@@ -88,7 +88,7 @@
                             <li><span>Harga Satuan</span> <span>Rp. {{$price}}</span></li>
                             <input id="qty" type="hidden" name="qty" value="1" class="form-control" style="width: 20%;">
                         </ul>
-                        <button class="btn btn-success btn-lg">Add to Cart</button>
+                        <button class="btn btn-success btn-lg">Tambahkan ke keranjang</button>
                     </form>
                         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#review" style="margin-top: 25px;">
                           Lihat Review
