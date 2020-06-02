@@ -16,12 +16,12 @@
     <!-- ##### Breadcumb Area End ##### -->
 
     <!-- ##### Checkout Area Start ##### -->
-    <div style="background-color: #333333" class="checkout_area section-padding-80">
+    <div class="checkout_area section-padding-80">
         <div class="container">
             <div class="row">
 
                 <div class="col-12 col-md-7">
-                    <div class="card rounded">
+                    <div class="card">
 
                         <div class="card-header">
                             <h5 class="card-title">Detail Pesanan</h5>
@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
-                    <div class="card rounded">
+                    <div class="card">
 
                         <div class="card-header">
                             <h5 class="card-title">Daftar Pesanan</h5>

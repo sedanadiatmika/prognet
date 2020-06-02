@@ -1,14 +1,13 @@
 @extends('layouts.user')
 @section('judul','User | Home Page')
 @section('content')
-    <div style="background-color: #333333">
     <!-- ##### Breadcumb Area Start ##### -->
     <div class="breadcumb_area bg-img" style="background-image: url(assets/user/img/bg-img/breadcumb.jpg); margin-top: 5%">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="page-title text-center">
-                        <h2>Beranda</h2>
+                        <h2>{{$title}}</h2>
                     </div>
                 </div>
             </div>
@@ -26,7 +25,7 @@
                         <!-- ##### Single Widget ##### -->
                         <div class="widget catagory mb-50">
                             <!-- Widget Title -->
-                            <h6 class="widget-title mb-30 text-white">Cari Berdasarkan Kategori</h6>
+                            <h6 class="widget-title mb-30">Cari Berdasarkan Kategori</h6>
 
                             <!--  Catagories  -->
                             
@@ -61,17 +60,17 @@
                                 <div class="product-topbar d-flex align-items-center justify-content-between">
                                     <!-- Total Products -->
                                     <div class="total-products">
-                                        <p class="text-white"><span>{{$count_product}}</span> Produk Ditemukan</p>
+                                        <p><span>{{$count_product}}</span> Produk Ditemukan</p>
                                     </div>
                                     <!-- Sorting -->
                                     <div class="product-sorting d-flex">
-                                        <p class="text-white">Urutkan menurut:</p>
+                                        <p>Sort by:</p>
                                         <form action="#" method="get">
                                             <select name="select" id="sortByselect">
-                                                <option value="value">Rating Tertinggi</option>
-                                                <option value="value">Terbaru</option>
-                                                <option value="value">Harga Termahal</option>
-                                                <option value="value">Harga Termurah</option>
+                                                <option value="value">Highest Rated</option>
+                                                <option value="value">Newest</option>
+                                                <option value="value">Price: $$ - $</option>
+                                                <option value="value">Price: $ - $$</option>
                                             </select>
                                             <input type="submit" class="d-none" value="">
                                         </form>
@@ -86,7 +85,7 @@
                             <!-- Single Product -->
                             <div class="col-12 col-sm-6 col-lg-4">
                             	
-                                <div class="single-product-wrapper rounded" id="product_template">
+                                <div class="single-product-wrapper" id="product_template">
                                     <!-- Product Image -->
                                     
                                     <div class="product-img">
@@ -215,7 +214,5 @@
                     </div>
                 </div>
             </div>
-
-        </div>
 
 @endsection

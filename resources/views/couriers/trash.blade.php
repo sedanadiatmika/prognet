@@ -24,7 +24,10 @@
                       <thead>
                         <tr>
                           <th>
-                         Nama Kurir
+                         Kode Kurir
+                          </th>
+                          <th>
+                         Title Kurir
                           </th>
                           <th>
                             Action
@@ -34,7 +37,8 @@
                       <tbody>
                         @foreach($couriers as $courier)
                         <tr>
-                          <td>{{ $courier->courier }}</td>
+                          <td>{{ $courier->code }}</td>
+                          <td>{{ $courier->title }}</td>
                           <td>
                               <a class="btn-sm btn-info" href="/couriers/restore/{{ $courier->id }}"  onclick="return confirm('Apa yakin ingin mengembalikan data ini?')">Restore</a>
                               <a class="btn-sm btn-danger" href="/couriers/destroy/{{ $courier->id }}"  onclick="return confirm('Apa yakin ingin menghapus permanen data ini?')">Delete</a>

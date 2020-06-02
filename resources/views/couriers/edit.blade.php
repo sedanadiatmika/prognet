@@ -20,8 +20,12 @@
                         </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Nama Kurir</label>
-                            <input type="text" class="form-control" placeholder="Nama Kurir" value="{{ $courier->courier }}" aria-label="Nama Kurir" aria-describedby="basic-addon1" name="courier">
+                            <label>Kode Kurir</label>
+                            <input type="text" class="form-control" placeholder="Kode Kurir" value="{{ $courier->code }}" aria-label="Kode Kurir" aria-describedby="basic-addon1" name="code">
+                        </div>
+                        <div class="form-group">
+                            <label>Title Kurir</label>
+                            <input type="text" class="form-control" placeholder="Title Kurir" value="{{ $courier->title }}" aria-label="Title Kurir" aria-describedby="basic-addon1" name="title">
                         </div>
                     </div>
                         <div class="card-footer">
