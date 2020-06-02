@@ -1,7 +1,6 @@
 @extends('layouts.cart')
 @section('judul','User | Detail Keranjang Page')
 @section('content')
-<div style="background-color: #333333">
 <?php $total = 0; ?>
 @foreach($products as $product)
 @if ($message = Session::get('notif'))
@@ -24,7 +23,7 @@
         </div>
 
         <!-- Single Product Description -->
-        <div style="background-color: white" class="col-12 col-md-6 col-lg-5 ml-lg-auto">
+        <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
             <?php 
                 $diskon = 0;
                 $price = $product->price;
@@ -82,7 +81,7 @@
     @endforeach
     <!-- ##### Single Product Details Area End ##### -->
 <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
-    <div style="background-color: white" class="order-details-confirmation">
+    <div class="order-details-confirmation">
         <ul class="order-details-form">
             <li>
                 <span><h5>Total : </h5>
@@ -162,5 +161,5 @@
                     </div>
                 </div>
             </div>
-        </div>
+
 @endsection

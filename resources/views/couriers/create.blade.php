@@ -18,8 +18,12 @@
                         </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Nama Kurir</label>
-                            <input type="text" class="form-control" placeholder="Nama Kurir" aria-label="Nama Produk" aria-describedby="basic-addon1" name="courier">
+                            <label>Kode Kurir</label>
+                            <input type="text" class="form-control" placeholder="Kode Kurir" aria-label="Kode Kurir" aria-describedby="basic-addon1" name="code">
+
+                            <div class="form-group">
+                            <label>Title Kurir</label>
+                            <input type="text" class="form-control" placeholder="Title Kurir" aria-label="Title Kurir" aria-describedby="basic-addon1" name="title">
                     </div>
                         <div class="card-footer">
                             <button class="btn btn-md btn-outline-success" type="submit">Tambah</button>

@@ -32,7 +32,8 @@
                         @foreach($couriers as $courier)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $courier->courier }}</td>
+                          <td>{{ $courier->code }}</td>
+                          <td>{{ $courier->title }}</td>
                           <td>
                               <a class="btn-sm btn-info" href="{{ route('couriers.show',$courier->id) }}"><i class="mdi mdi-eye"></i></a>
     
