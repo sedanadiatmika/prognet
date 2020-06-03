@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div class="checkout_area section-padding-100">
+    <div style="background-color: #333333" class="checkout_area section-padding-100 text-white">
         <div class="container">
             <div class="row">
     		<div class="col-12 col-md-6 col-lg-12 ml-lg-center">

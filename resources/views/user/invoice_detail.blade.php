@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div class="checkout_area section-padding-100">
+    <div style="background-color: #333333" class="checkout_area section-padding-100 text-white">
         <div class="container">
             <?php $total = 0; ?>
             <?php $qty = 0; ?>

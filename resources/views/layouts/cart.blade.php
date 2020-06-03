@@ -28,7 +28,7 @@
             <!-- Classy Menu -->
             <nav class="classy-navbar" id="essenceNav">
                 <!-- Logo -->
-                <a class="nav-brand" href="/home"><img src="{{ asset('assets/user/img/core-img/logo.png') }}" alt=""></a>
+                <a class="nav-brand" href="/home">EXCLUSIVE</a>
                 <!-- Navbar Toggler -->
                 <div class="classy-navbar-toggler">
                     <span class="navbarToggler"><span></span><span></span><span></span></span>
