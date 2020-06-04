@@ -21,7 +21,7 @@ class AdminLoginController extends Controller
         //validasi data di form
         $this->validate($request,[
             'username'=>'required|string',
-            'password'=>'required|min:8',
+            'password'=>'required|min:5'
         ]);
         //percobaan login
         if(Auth::guard('admin')->attempt(['username'=> $request->username, 'password'=> $request->password],$request->remember)){
@@ -35,7 +35,7 @@ class AdminLoginController extends Controller
 
     public function logout(){
         Auth::guard('admin')->logout();
-        return redirect('/admin');
+        return redirect('/admin/login');
     }    
     
 }

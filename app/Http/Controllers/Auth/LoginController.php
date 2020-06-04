@@ -41,6 +41,6 @@ class LoginController extends Controller
 
     public function userLogout(){
         Auth::guard('web')->logout();
-        return redirect('/home');
+        return redirect('/');
     }    
 }

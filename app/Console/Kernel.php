@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
+use App\Transaction;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,9 +25,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-         $schedule->call(function () {
-            DB::table('transactions')->whereDate('timeout', '<', date('Y-m-d I:m:s'))->update(['status'=>'expired']);
+        $schedule->call(function (){
+            date_default_timezone_set("Asia/Makassar");
+            $transaksi = Transaction::where('timeout', '<', date('Y-m-d H:i:s'))->where('status', '=', 'unverified')->get();
+            if(!is_null($transaksi)){
+                foreach($transaksi as $item){
+                    $item->status = 'expired';
+                    $item->save();
+                }
+            }
         })->everyMinute();
     }
 

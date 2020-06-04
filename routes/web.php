@@ -14,90 +14,93 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('user.home');
+    return view('home');
 });
 
-Auth::routes(['verify' => true, 'guest']);
+//User Route
+Route::get('/marknotif', 'UsersController@marknotif');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeUnauthController@index');
+Route::get('/profile', 'UsersController@profile');
+Route::post('/profile', 'UsersController@update_avatar');
+Route::get('/categories', 'CategoriesController@categories');
+Route::post('/checkout', 'CheckoutController@index');
+Route::post('/ongkir', 'CheckoutController@submit');
+Route::get('/kota/{id}', 'CheckoutController@getCities');
+Route::post('/beli', 'TransactionController@store');
+Route::get('/product/{id}', 'HomeController@show');
+Route::get('/product/{id}', 'HomeUnauthController@show');
+Route::post('/show_categori', 'HomeController@show_kategori');
+Route::get('/cart', 'CartController@cart');
+Route::post('/tambah_cart', 'CartController@store');
+Route::post('/update_qty', 'CartController@update');
+Route::get('/cart', 'CartController@show');
+Route::post('/beli', 'TransactionController@store');
+Route::get('/transaksi/{id}', 'TransactionController@index');
+Route::get('/transaksi/detail/{id}', 'TransactionDetailController@index');
+Route::post('/transaksi/detail/status', 'TransactionDetailController@membatalkanPesanan');
+Route::post('/transaksi/detail/proof', 'TransactionDetailController@uploadProof');
+Route::post('/transaksi/detail/review', 'ProductReviewController@store');
+Route::post('/transaksi/detail/review', 'ProductReviewController@store');
+Route::post('/respon', 'ResponseController@store');
+Route::post('/edit/review', 'ProductReviewController@update');
+Route::get('/user/logout', 'Auth\LoginController@userLogout')->name('user.logout');
 
-Route::get('/home', 'UserController@index')->middleware(['auth','verified'])->name('home');
-
-//Route Admin
+//Admin Route
 Route::prefix('admin')->group(function(){
     Route::get('/login', 'Auth\AdminLoginController@showLoginform')->middleware('guest')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->middleware('guest')->name('admin.login.submit');
-    Route::get('/', 'AdminController@index')->name('admin.dashboard')->middleware('authAdmin:admin');
+    Route::get('/', 'AdminController@index')->name('admin.dashboard');
     Route::get('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
-    Route::get('/order/new', 'AdminController@orderNew');
-    Route::get('/order/process', 'AdminController@orderProces');
-    Route::get('/order/success', 'AdminController@orderSuccess');
-    Route::get('/order/cek/{id}', 'AdminController@orderDetail');
-    Route::get('/order/cancel', 'AdminController@orderCancel');
+    Route::resource('/products', 'AdminProductController');
+    Route::resource('/categories', 'AdminCategoryController');
+    Route::resource('/couriers', 'AdminCourierController');
+    Route::get('/transaksi', 'TransactionController@adminIndex');
+    Route::post('/transaksi/sort', 'TransactionController@sort');
+    Route::get('/transaksi/detail/{id}', 'TransactionDetailController@adminIndex');
+    Route::get('/marknotifadmin', 'AdminController@markReadAdmin');
 });
-Route::patch('/order/update/{id}', 'AdminController@orderUpdate');
 
-Route::group(['middleware'=>['authAdmin:admin']],function(){
-//Product
-Route::resource('products','ProductController');
-Route::get('/addImage/{id}', 'ProductController@upload');
-Route::post('/addImage/{id}', 'ProductController@upload_image');
-Route::get('/products/delete/{id}', 'ProductController@soft_delete');
-Route::get('/products-trash', 'ProductController@trash');
-Route::get('/products/restore/{id}', 'ProductController@restore');
-Route::get('/products-restore-all', 'ProductController@restore_all');
-Route::get('/products/destroy/{id}', 'ProductController@delete');
-Route::get('/products-delete-all', 'ProductController@delete_all');
-Route::resource('product_images','ProductImageController');
-Route::get('/category_detail/delete/{id}', 'ProductController@soft_delete_category');
-Route::get('/category_detail/create/{id}', 'ProductController@add_category');
-Route::post('/category_detail/store', 'ProductController@store_category');
+//Admin Product
+Route::resource('products', 'AdminProductController');
+Route::get('/addImage/{id}', 'AdminProductController@upload');
+Route::post('/addImage/{id}', 'AdminProductController@upload_image');
+Route::get('/addDiscount/{id}', 'AdminProductController@discount');
+Route::post('/addDiscount/{id}', 'AdminProductController@add_discount');
+Route::get('/products/delete/{id}', 'AdminProductController@soft_delete');
+Route::get('/products-trash', 'AdminProductController@trash');
+Route::get('/products/restore/{id}', 'AdminProductController@restore');
+Route::get('/products-restore-all', 'AdminProductController@restore_all');
+Route::get('/products/destroy/{id}', 'AdminProductController@delete');
+Route::get('/products-delete-all', 'AdminProductController@delete_all');
+Route::resource('product_images','AdminProductImageController');
+Route::resource('discounts','AdminDiscountController');
 Route::resource('response', 'ResponseController');
+Route::post('/admin/transaksi/sort', 'TransactionController@sort');
+Route::post('/report-bulan', 'TransactionController@filterBulan');
+Route::post('/report-tahun', 'TransactionController@filterTahun');
+Route::post('/grafik', 'TransactionController@grafik');
 
-//Courier
-Route::resource('couriers', 'CourierController');
-Route::get('/couriers/delete/{id}', 'CourierController@soft_delete');
-Route::get('/couriers-trash', 'CourierController@trash');
-Route::get('/couriers/restore/{id}', 'CourierController@restore');
-Route::get('/couriers-restore-all', 'CourierController@restore_all');
-Route::get('/couriers/destroy/{id}', 'CourierController@delete');
-Route::get('/couriers-delete-all', 'CourierController@delete_all');
 
-//Product_Categories
-Route::resource('categories', 'CategoryController');
-Route::get('/categories/delete/{id}', 'CategoryController@soft_delete');
-Route::get('/categories-trash', 'CategoryController@trash');
-Route::get('/categories/restore/{id}', 'CategoryController@restore');
-Route::get('/categories-restore-all', 'CategoryController@restore_all');
-Route::get('/categories/destroy/{id}', 'CategoryController@delete');
-Route::get('/categories-delete-all', 'CategoryController@delete_all');
+//Admin Product_Categories
+Route::resource('categories', 'AdminCategoryController');
+Route::get('/categories/delete/{id}', 'AdminCategoryController@soft_delete');
+Route::get('/categories-trash', 'AdminCategoryController@trash');
+Route::get('/categories/restore/{id}', 'AdminCategoryController@restore');
+Route::get('/categories-restore-all', 'AdminCategoryController@restore_all');
+Route::get('/categories/destroy/{id}', 'AdminCategoryController@delete');
+Route::get('/categories-delete-all', 'AdminCategoryController@delete_all');
 
-//Discount
-Route::resource('discounts', 'DiscountController');
-Route::get('/discounts/delete/{id}', 'DiscountController@soft_delete');
-Route::get('/discounts/add/{id}', 'DiscountController@add_discount');
-});
+// Admin Product_Category_Detail
+Route::resource('product_category_details', 'AdminProductCategoryDetailController');
 
-Route::group(['middleware'=>['auth','verified']], function(){
-//User
-Route::resource('users', 'UserController');
-Route::resource('carts', 'CartController');
-Route::post('/carts/add', 'CartController@store');
-Route::get('/carts/delete/{id}', 'CartController@delete');
-Route::post('/carts/update', 'CartController@update');
-Route::patch('/carts/checkout/{id}', 'CartController@checkout_status');
-Route::get('/carts/checkout/{id}', 'CartController@checkout_status');
-Route::get('/userscheckout', 'UserController@checkout');
-Route::resource('transactions', 'TransactionController');
-Route::get('/province/{id}/cities', 'TransactionController@getCities');
-Route::get('/destination/cost', 'TransactionController@getOngkir');
-Route::post('/carts/update', 'CartController@update');
-Route::post('/checkout/cancel/{id}', 'CartController@cancel_checkout');
-Route::get('/users/{id}/invoice', 'UserController@invoice');
-Route::get('/users/invoice/{id}', 'UserController@getInvoice');
-Route::get('/users/search/category', 'UserController@search_category');
-Route::patch('/uploadPOP/{id}', 'UserController@uploadPOP');
-Route::get('/users/search/name','UserController@search');
-Route::patch('/transaction/success/{id}', 'UserController@confirmation');
-Route::resource('reviews', 'ReviewController');
-Route::patch('/transactions/cancel/{id}', 'UserController@cancel_transaction');
-});
+//Admin Courier
+Route::resource('couriers', 'AdminCourierController');
+Route::get('/couriers/delete/{id}', 'AdminCourierController@soft_delete');
+Route::get('/couriers-trash', 'AdminCourierController@trash');
+Route::get('/couriers/restore/{id}', 'AdminCourierController@restore');
+Route::get('/couriers-restore-all', 'AdminCourierController@restore_all');
+Route::get('/couriers/destroy/{id}', 'AdminCourierController@delete');
+Route::get('/couriers-delete-all', 'AdminCourierController@delete_all');
 
+Auth::routes(['verify' => true]);

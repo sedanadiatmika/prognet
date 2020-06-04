@@ -16,7 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','status','profile_image',
+        'name', 'email','profile_image','status', 'password',
     ];
 
     /**
@@ -36,4 +36,18 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function product(){
+        return $this->belongsToMany('App\Product', 'product_reviews', 'user_id', 'product_id')->withPivot('id');
+    }
+
+    public function cart(){
+        return $this->hasMany('App\Cart', 'user_id', 'id');
+    }
+
+    public function product_cart(){
+        return $this->belongsToMany('App\Product', 'carts', 'user_id', 'product_id')->withPivot('id');
+    }
+    public function notifications(){
+        return $this->morphMany(UserNotification::class, 'notifiable' )->orderBy('created_at', 'desc');
+    }
 }

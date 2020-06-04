@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Transaction;
 
 class AdminController extends Controller
@@ -15,7 +14,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth:admin','authAdmin:admin']);
+        $this->middleware(['auth:admin']);
     }
 
     /**
@@ -23,71 +22,56 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('admin.home');
-    }
+    public function index(){
+        $transaksi = Transaction::whereMonth('created_at','=', date('m'))->whereYear('created_at','=', date('Y'))->get();
+        $status = ['unverified' => 0,'expired' => 0, 'canceled' => 0, 'verified' => 0, 'delivered' => 0, 'success' => 0, 'harga' => 0, 'total' => $transaksi->count()];
+        $status['unverified'] = $this->findCountStatus('unverified',1);
+        $status['expired'] = $this->findCountStatus('expired',1);
+        $status['canceled'] = $this->findCountStatus('canceled',1);
+        $status['verified'] = $this->findCountStatus('verified',1);
+        $status['delivered'] = $this->findCountStatus('delivered',1);
+        $status['success'] = $this->findCountStatus('success',1);
 
-    public function orderNew(){
-        $status = "UNVERIFIED";
-        $transactions = DB::table('transactions')
-            ->join('users', 'users.id', '=', 'transactions.user_id')
-            ->select('transactions.*', 'users.name')
-            ->where('transactions.status', '=', 'unverified')
-            ->orderby('transactions.date_order', 'desc')->paginate(10);
-        return view('admin.cek_order', compact('transactions', 'status'));
-    }
-
-    public function orderProces(){
-        $status = "VERIFIED DAN DELIVERED";
-        $transactions = DB::table('transactions')
-            ->join('users', 'users.id', '=', 'transactions.user_id')
-            ->select('transactions.*', 'users.name')
-            ->where('transactions.status', '=', 'verified')
-            ->orWhere('transactions.status', '=', 'delivered')
-            ->orderby('transactions.date_order', 'desc')->paginate(10);
-        return view('admin.cek_order', compact('transactions', 'status'));
-    }
-
-    public function orderSuccess(){
-        $status = "SUCCESS";
-        $transactions = DB::table('transactions')
-            ->join('users', 'users.id', '=', 'transactions.user_id')
-            ->select('transactions.*', 'users.name')
-            ->where('transactions.status', '=', 'success')
-            ->orderby('transactions.date_order', 'desc')->paginate(10);
-        return view('admin.cek_order', compact('transactions', 'status'));
-    }
-
-    public function orderCancel(){
-        $status = "CANCELED AND EXPIRED";
-        $transactions = DB::table('transactions')
-            ->join('users', 'users.id', '=', 'transactions.user_id')
-            ->select('transactions.*', 'users.name')
-            ->where('transactions.status', '=', 'canceled')
-            ->orWhere('transactions.status', '=', 'expired')
-            ->orderby('transactions.date_order', 'desc')->paginate(10);
-        return view('admin.cek_order', compact('transactions', 'status'));
-    }
-
-    public function orderDetail($id){
-        $transaction = DB::table('transactions')
-        ->join('users', 'users.id', '=', 'transactions.user_id')
-        ->select('transactions.*', 'users.name')
-        ->where('transactions.id', '=', $id)->first();
-        return view('admin.edit_status_order', compact('transaction'));
-    }
-
-    public function orderUpdate(Request $request, $id){
-        $transaction = Transaction::find($id);
-        $transaction->status = $request->status;
-        $transaction->save();
-        if ($request->status=='unverified') {
-            return redirect('admin/order/new')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
-        }elseif($request->status=='canceled'){
-            return redirect('admin/order/cancel')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
-        }else{
-            return redirect('admin/order/process')->with(['notif' => "Status Transaksi Sukses Diupdate"]);
+        foreach($transaksi as $item){
+            if($item->status == 'verified' || $item->status == 'delivered' || $item->status == 'success'){
+                $status['harga'] = $status['harga'] + $item->total;
+            }
         }
+
+        $transaksi_tahun = Transaction::whereYear('created_at','=', date('Y'))->get();
+        $status_tahun = ['unverified' => 0,'expired' => 0, 'canceled' => 0, 'verified' => 0, 'delivered' => 0, 'success' => 0, 'harga' => 0];
+        $status_tahun['unverified'] = $this->findCountStatus('unverified',2);
+        $status_tahun['expired'] = $this->findCountStatus('expired',2);
+        $status_tahun['canceled'] = $this->findCountStatus('canceled',2);
+        $status_tahun['verified'] = $this->findCountStatus('verified',2);
+        $status_tahun['delivered'] = $this->findCountStatus('delivered',2);
+        $status_tahum['success'] = $this->findCountStatus('success',2);
+
+        foreach($transaksi_tahun as $item){
+            if($item->status == 'verified' || $item->status == 'delivered' || $item->status == 'success'){
+                $status_tahun['harga'] = $status_tahun['harga'] + $item->total;
+            }
+        }
+
+        for($i = 1;$i<=12;$i++){
+            $bulan[$i] = $transaksi = Transaction::whereMonth('created_at','=', $i)->whereYear('created_at','=', date('Y'))->count();
+        }
+        return view('admin', ['transaksi' => $transaksi, 'status' => $status,'transaksi_tahun' => $transaksi_tahun, 'status_tahun'=>$status_tahun, 'bulan' => $bulan]);
+    }
+
+    public function findCountStatus($status,$cek)
+    {
+        if($cek==1){
+            $count = Transaction::whereMonth('created_at','=', date('m'))->whereYear('created_at','=', date('Y'))->where('status','=',$status)->count();
+        }else{
+            $count = Transaction::whereYear('created_at','=', date('Y'))->where('status','=',$status)->count();
+        }
+        return $count;
+    }
+    
+    public function markReadAdmin(){
+        $admin = Admin::find(1);
+        $admin->unreadNotifications()->update(['read_at' => now()]);
+        return redirect()->back();
     }
 }

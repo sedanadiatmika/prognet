@@ -1,255 +1,373 @@
-@extends('layouts.admin')
-@section('judul','User | Checkout Page')
-@section('content')
- <!-- ##### Breadcumb Area Start ##### -->
-    <div class="breadcumb_area bg-img" style="background-image: url(assets/user/img/bg-img/breadcumb.jpg);">
-        <div class="container h-100">
-            <div class="row h-100 align-items-center">
-                <div class="col-12">
-                    <div class="page-title text-center">
-                        <h2>Checkout</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Checkout</title>
+<link rel="shortcut icon" href="{{asset('assets/User/images/shirt.png')}}" type="image/x-icon">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Sublime project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<link href="{{asset('assets/css/mdb.min.css')}}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/User/styles/bootstrap4/bootstrap.min.css')}}">
+<link href="{{asset('assets/User/plugins/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/User/styles/checkout.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/User/styles/checkout_responsive.css')}}">
+</head>
+<body>
+
+<div class="super_container">
+
+	@extends('layouts.navbar')
+	
+	<!-- Home -->
+
+	<div style="background-color: #333333" class="home">
+		<div class="home_container">
+			<div class="home_background" style="background-image:url(assets/User/images/cart.jpg)"></div>
+			<div class="home_content_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="home_content">
+								<div class="breadcrumbs">
+									<ul>
+										<li><a href="index.html">Home</a></li>
+										<li><a href="cart.html">Shopping Cart</a></li>
+										<li>Checkout</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Checkout -->
+	
+	<div style="background-color: #333333" class="checkout">
+		<div class="container">
+      <form action="/beli" method="post" id="checkout_form" class="checkout_form">
+        @csrf
+			<div class="row">
+
+				<!-- Billing Info -->
+				<div class="col-lg-6">
+					<div class="billing checkout_section">
+						<div class="section_title text-light">Billing Address</div>
+						<div class="section_subtitle text-light">Enter your address info</div>
+						<div class="checkout_form_container text-light">
+								<div>
+									<!-- Name -->
+									<label class="text-light" for="checkout_name">Name*</label>
+									<input type="text" value="{{Auth::user()->name}}" id="nama" class="checkout_input" disabled>
+								</div>
+								<div>
+									<!-- Email -->
+									<label class="text-light" for="checkout_email">Email Address*</label>
+									<input type="email" value="{{Auth::user()->email}}" id="email" class="checkout_input" disabled>
+								</div>
+								<div>
+									<!-- Phone no -->
+									<label class="text-light" for="checkout_phone">Phone no*</label>
+									<input name="no_telp" type="text" id="nomor-telp" class="checkout_input" required="required">
+								</div>
+								<div>
+									<!-- Province -->
+									<label class="text-light" for="checkout_province">Province*</label>
+									<select name="province" id="provinsi" class="dropdown_item_select checkout_input cekongkir" require="required">
+										<option>Provinsi*</option>
+                      @foreach ($provinsi as $prov)
+                        <option value="{{$prov->id}}">{{$prov->title}}</option>
+                      @endforeach
+									</select>
+								</div>
+								<div>
+									<!-- City / Town -->
+									<label class="text-light" for="checkout_city">City/Town*</label>
+									<select name="regency" id="kota" class="dropdown_item_select checkout_input cekongkir" require="required">
+										<option value=""></option>
+									</select>
+								</div>
+								<div>
+									<!-- Address -->
+									<label class="text-light" for="checkout_address">Address*</label>
+									<input type="text" id="alamat" name="address" class="checkout_input" required="required">
+								</div>
+								<div>
+									<label class="text-light" for="checkout_province">Courier*</label>
+									<select name="courier" id="kurir" class="dropdown_item_select checkout_input cekongkir">
+                                        <option>Kurir*</option>
+                                        @foreach ($kurir as $k)
+                                            <option value="{{$k->id}}">{{$k->courier}}</option>
+                                        @endforeach
+                                    </select>
+								</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Order Info -->
+
+				<div class="col-lg-6">
+					<div class="order checkout_section">
+						<div class="section_title">Your order</div>
+						<div class="section_subtitle">Order details</div>
+
+						<!-- Order details -->
+						<div class="order_list_container">
+							<ul class="order_list">
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="order_list_title">Subtotal</div>
+									<div class="order_list_value ml-auto">Rp.{{$subtotal}}</div>
+								</li>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+                  <div class="order_list_title">Shipping</div>
+                  <div class="order_list_value ml-auto" id="biaya-ongkir"></div>
+								</li>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="order_list_title">Total</div>
+									<div class="order_list_value ml-auto">Rp.<span id="total-biaya"></span></div>
+								</li>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<input type="hidden" name="sub_total" value="{{$subtotal}}">
+                  <input type="hidden" name="total" id="totalbiaya">
+                  <input type="hidden" name="shipping_cost" id="ongkir">
+                  <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                  <input type="hidden" name="product_id" value="{{$product_id}}">
+									<input type="hidden" name="qty" value="{{$qty}}">
+									
+									<button type="submit" class="btn btn-primary btn-rounded" id="beli">Proceed</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+      </div>
+    </form>
     </div>
-    <!-- ##### Breadcumb Area End ##### -->
+	</div>
+	<div class="container ganti">
+        <section class="section my-5 pb-5">
+  
+          <!-- Shopping Cart table -->
+          <div style="color:#333333;" class="table-responsive">
+            <h1 align="center">Rincian Produk</h1>
 
-    <!-- ##### Checkout Area Start ##### -->
-    <div style="background-color: #333333" class="checkout_area section-padding-80">
-        <div class="container">
-            <div class="row">
+            <table class="table product-table">
+  
+              <!-- Table head -->
+              <thead>
+  
+                <tr>
+  
+                  <th></th>
+  
+                  <th class="font-weight-bold">
+  
+                    <strong>Product</strong>
+  
+                  </th>
+  
+                  <th></th>
+  
+                  <th class="font-weight-bold">
+  
+                    <strong>Price</strong>
+  
+                  </th>
+  
+                  <th class="font-weight-bold">
+  
+                    <strong>QTY</strong>
+  
+                  </th>  
+                  <th></th>
+  
+                </tr>
+  
+              </thead>
+              <!-- Table head -->
+  
+              <!-- Table body -->
+              <tbody>
+  
+                <!-- First row -->
+                @foreach ($cart as $item)
+                <tr>
+                  @if (is_null($item->product))
+                  <th scope="row">
+                    <input type="hidden" class="id_cart{{$loop->iteration-1}}" value="{{$item->id}}">
+                    <input type="hidden" id="user_id" value="{{$item->user_id}}">
+                    <input type="hidden" class="stock{{$loop->iteration-1}}" value="{{$item->stock}}">
+                      @foreach ($item->product_image as $image)
+                          <img style="width:50px; height:50px;" src="{{asset('/uploads/product_images/'.$image->image_name)}}" alt=""
+                          class="img-fluid z-depth-0">
+                          @break
+                      @endforeach
+                  </th>
+  
+                  <td>
+                    <h5 class="mt-3">
+                      <strong>{{$item->product_name}}</strong>
+                    </h5>
+                  </td>
+                  <td></td>
+                  @php
+                      $home = new Home;
+                      $hasil = $home->diskon($item->discount,$item->price);
+                  @endphp
+                  @if ($hasil != 0)
+                         <td> Rp<span class="float-lef grey-text price{{$loop->iteration-1}}">{{$hasil}}</li>
+                          Rp.<span class="float-lef grey-text"><small><s>{{$item->price}}</s></small></span>
+                        </td>
+                  @else
+                          <td>Rp.<span class="float-lef grey-text price{{$loop->iteration-1}}">{{$item->price}}</li></td>
+                  @endif
+                  <td class="text-center text-md-left">
+  
+                    <span class="qty{{$loop->iteration-1}}">{{$qty}} </span>
+  
+                  </td>    
 
-                <div class="col-12 col-md-7">
-                    <div class="card rounded">
+                  @else
+                  <th scope="row">
+                    <input type="hidden" class="id_cart{{$loop->iteration-1}}" value="{{$item->id}}">
+                    <input type="hidden" id="user_id" value="{{$item->user_id}}">
+                    <input type="hidden" class="stock{{$loop->iteration-1}}" value="{{$item->product->stock}}">
+                      @foreach ($item->product->product_image as $image)
+                          <img style="width:50px; height:50px;" src="{{asset('/uploads/product_images/'.$image->image_name)}}" alt="" class="img-fluid z-depth-0">
+                          @break
+                      @endforeach
+                  </th>
+  
+                  <td>
+                    <h5 class="mt-3">
+                      <strong>{{$item->product->product_name}}</strong>
+                    </h5>
+                  </td>
+                  <td></td>
+                  @php
+                      $home = new Home;
+                      $hasil = $home->diskon($item->product->discount,$item->product->price);
+                  @endphp
+                  @if ($hasil != 0)
+                         <td> Rp<span class="float-lef grey-text price{{$loop->iteration-1}}">{{$hasil}}</li>
+                          Rp<span class="float-lef grey-text"><small><s>{{$item->product->price}}</s></small></span></td>
+                  @else
+                          <td>Rp<span class="float-lef grey-text price{{$loop->iteration-1}}">{{$item->product->price}}</li></td>
+                  @endif
+                  <td class="text-center text-md-left">
+                    <p class="text-danger" style="display:none" id="notif{{$loop->iteration-1}}"></p>
+  
+                    <span class="qty{{$loop->iteration-1}}">{{$item->qty}} </span>
+  
+                  </td>    
 
-                        <div class="card-header">
-                            <h5 class="card-title">Detail Pesanan</h5>
-                        </div>
-
-                        <form action="{{ route('transactions.store') }}" method="post">
-                            @csrf
-                            <div class="card-body">
-                                <div class="col-md-12 mb-2">
-                                    <label for="first_name">Nama <span>*</span></label>
-                                    <input type="text" class="form-control" name="name" value="{{$user->name}}">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="country">Provinsi <span>*</span></label>
-                                    <select class="w-100 form-control" name="province_destination">
-                                        <option>--Provinsi--</option>
-                                        @foreach($provinces as $province => $value)
-                                            <option value="{{$province}}">{{$value}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="country">Kabupaten <span>*</span></label>
-                                    <select class="w-100 form-control" name="city_destination">
-                                        <option>--Kabupaten/Kota--</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="country">Kurir <span>*</span></label>
-                                    <select class="w-100 form-control" name="courier">
-                                        <option>--Kurir--</option>
-                                        @foreach($couriers as $courier => $value)
-                                            <option value="{{$courier}}">{{$value}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label id="btn-calculate" class="btn btn-md btn-info">Kalkulasi Ongkir</label>
-                                </div>
-                                <?php $weight = 0; ?>
-                                <?php $total = 0; ?>
-                                @foreach($products as $product)
-                                    <?php 
-                                            $price =  $product->price;
-                                            $diskon = 0;
-                                        ?>
-                                        @foreach($discounts as $discount)
-                                            @if($discount->id_product == $product->id)
-                                                <?php 
-                                                    $diskon = $discount->percentage;
-                                                 ?>
-                                                 @break
-                                            @endif
-                                        @endforeach
-                                        <?php $sub_total = ($price-($price*$diskon/100))*$product->qty;?>
-
-                                    <?php
-                                        $total = $total + $sub_total; 
-                                        $weight = $weight + $product->weight;
-                                     ?>
-                                @endforeach
-                                <input type="hidden" name="subtotal" value="{{$total}}">
-                                <div class="col-12 mb-3">
-                                    <label for="postcode">Berat Pesanan (gram)<span>*</span></label>
-                                    <input type="text" class="form-control" id="weight" value="{{$weight}}" name="weight" readonly="">
-                                </div>
-                                 <div class="col-12 mb-3">
-                                    <label for="postcode">Ongkir<span>*</span></label>
-                                    <input type="text" class="form-control" id="ongkir" value="0" name="ongkir" readonly="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="street_address">Address <span>*</span></label>
-                                    <input type="text" class="form-control mb-3" name="address" value="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="postcode">Postcode <span>*</span></label>
-                                    <input type="text" class="form-control" id="postcode" value="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="phone_number">No Telepon <span>*</span></label>
-                                    <input type="text" class="form-control" name="no_tlp">
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="email_address">Email <span>*</span></label>
-                                    <input type="email" class="form-control" name="email_address" value="{{$user->email}}">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <button type="submit" class="btn btn-md btn-success" onclick="return confirm('Apa yakin ingin membeli semua produk ini?')">Bayar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
-                    <div class="card rounded">
-
-                        <div class="card-header">
-                            <h5 class="card-title">Daftar Pesanan</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="table-order">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Sub Total</th>
-                                        </tr>
-                                    </thead>
-                                    <?php $total = 0; ?>
-                                    <?php $qty = 0; ?>
-                                    <tbody>
-                                        @foreach($products as $product)
-                                        <?php 
-                                            $price =  $product->price;
-                                            $diskon = 0;
-                                        ?>
-                                        @foreach($discounts as $discount)
-                                            @if($discount->id_product == $product->id)
-                                                <?php 
-                                                    $diskon = $discount->percentage;
-                                                 ?>
-                                                 @break
-                                            @endif
-                                        @endforeach
-                                        <?php $subtotal = ($price-($price*$diskon/100))*$product->qty;?>
-                                        <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$product->product_name}}</td>
-                                            <td>{{$product->qty}}</td>
-                                            <td>Rp. {{$subtotal}}</td>
-                                        </tr>
-                                        <?php $total = $total + $subtotal; ?>
-                                        <?php $qty = $qty + $product->qty; ?>
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td>Ongkir</td>
-                                            <td>*</td>
-                                            <td>*</td>
-                                            <td><span>Rp.</span><span id="ongkir_">0</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total</td>
-                                            <td>*</td>
-                                            <td>{{$qty}}</td>
-                                            <td><span>Rp.</span><span id="total">{{$total}}</span></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                                <br>
-                                <form action="/checkout/cancel/{{Auth::user()->id}}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Apa yakin ingin membatalkan pesanan ini?')">Batal</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
- 
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('select[name=province_destination]').on('change', function(){
-                let provinceId = $(this).val();
-                if (provinceId) {
-                    jQuery.ajax({
-                        url: '/province/'+provinceId+'/cities',
-                        type : "GET",
-                        dataType : "json",
-                        success: function(data){
-                            $('select[name="city_destination"]').empty();
-                            $.each(data, function(key, value){
-                                $('select[name=city_destination]').append('<option value="'+ key + '">'+ value + '</option>');
-                            });
-                        }
-                    });
-                }else{
-                    $('select[name="city_destination"]').empty();
-                }
-            });
-          /*  $('#btn-calculate').on('click', function(){
-                var city_id = $('select[name="city_destination"]').val();
-                var weight = $('input[name="weight"]').val();
-                var courier = $('select[name="courier"]').val();
-                $('input[name="ongkir"]').val(weight);
-            });*/
+                  @endif
+  
+                </tr>
+                @endforeach
+  
+              </tbody>
+              <!-- Table body -->
+  
+            </table>
+  
+          </div>
+          <!-- Shopping Cart table -->
+  
+        </section>
+        <input id="signup-token" name="_token" type="hidden" value="{{csrf_token()}}">
+        <input type="hidden" value="{{$weight}}" id="weight">
+      </div>
+</div>
+<script src="{{ asset ('assets/User/js/jquery-3.2.1.min.js')}}"></script>
+<script src="{{ asset ('assets/User/styles/bootstrap4/popper.js')}}"></script>
+<script src="{{ asset ('assets/User/styles/bootstrap4/bootstrap.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/greensock/TweenMax.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/greensock/TimelineMax.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/scrollmagic/ScrollMagic.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/greensock/animation.gsap.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/greensock/ScrollToPlugin.min.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/easing/easing.js')}}"></script>
+<script src="{{ asset ('assets/User/plugins/parallax-js-master/parallax.min.js')}}"></script>
+<script src="{{ asset ('assets/User/js/checkout.js')}}"></script>
+<script>
+    $(document).ready(function(e){
+        $('#provinsi').change(function(e){
+            var id_provinsi = $('#provinsi').val()
+            if(id_provinsi){
+                jQuery.ajax({
+                    url: '/kota/'+id_provinsi,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        $('#kota').empty();
+                        $.each(data, function(key,value){
+                            $('#kota').append('<option value="'+key+'">'+value+'</option>');
+                        });
+                    },
+                });
+            }else{
+                $('#kota').empty();
+            }
         });
-    </script>
-     <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
-    $("#btn-calculate").click(function(e){
+        $('.cekongkir').change(function(e){
+            var kurir = $('#kurir').val();
+            var provinsi = $('#provinsi').val();
+            var kota = $('#kota').val();
+            var berat = parseInt($('#weight').val());
+            if(provinsi>0 && kurir>0){
+                jQuery.ajax({
+                    url: "{{url('/ongkir')}}",
+                    method: 'POST',
+                    data: {
+                        _token: $('#signup-token').val(),
+                        destination: kota,
+                        weight: berat,
+                        courier: kurir,
+                        prov: provinsi, 
+                    },
+                    success: function(result){
+                        console.log(result.success);
+                        console.log(result.hasil["etd"]);
+                        $('#biaya-ongkir').text('Biaya Pengiriman: Rp.'+result.hasil["value"]);
+                        $('#ongkir').val(result.hasil["value"]);
+                        $('#biaya-ongkir').append('<input type="hidden" id="biaya-ongkir" value="'+result.hasil["value"]+'">');
+                        $('#biaya-ongkir').append('<li>Estimasi sampai: '+result.hasil["etd"]+'Hari</li>');
+                        $('#total-biaya').text({{$subtotal}}+result.hasil["value"]);
+                        $('#totalbiaya').val({{$subtotal}}+result.hasil["value"]);
+                    }
+                });
+                // console.log('wrong');
+                // console.log('kota: '+kota+' provinsi: '+provinsi+' Kurir: '+kurir)
+            }else{
+                console.log('wrong');
+                console.log('provinsi: '+provinsi+' Kurir: '+kurir)
+            }
 
-        e.preventDefault();
+        });
 
-        var city_id = $("select[name=city_destination]").val();
-        var courier = $("select[name=courier]").val();
-        var weight = $("input[name=weight]").val();
-        var url = '/destination/cost';
-        var total = {{$total}};
-        $.ajax({
-           url:url,
-           type:'GET',
-           dataType: "json",
-           data:{
-                  city_id:city_id, 
-                  weight:weight,
-                  courier:courier
-                },
-           success:function(response){
-              $('input[name="ongkir"]').val(response.ongkir);
-              $('#ongkir_').html(response.ongkir);
-              var total_ = response.ongkir + total;
-              $('#total').html(total_);
-           },
+        $('#beli').click(function(e){
+          var kurir = $('#kurir').val();
+          var provinsi = $('#provinsi').val();
+          var kota = $('#kota').val();
+          var alamat = $('#alamat').val();
+          var totals = parseInt($('#total-biaya').text());
+          var subtotal = parseInt('{{$subtotal}}');
+          var ongkir = $('#biaya-ongkir').val();
+          var user = $('#user_id').val();
+          console.log(totals)
+          if(totals==0){
+            alert('Tolong Lengkapi Masukan Data');
+            return false;
+          }
         });
     });
 </script>
-@endsection
+</body>
+</html>

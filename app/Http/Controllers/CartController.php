@@ -1,167 +1,75 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Product;
+use App\Category;
 use App\Cart;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Redirect;
-use Illuminate\Support\Facades\DB;
-use App\Product_image;
-use Auth;
+
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'verified']);
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
+    public function cart(){
+        $categories = Category::with('product')->get();
+        $products = Product::with('product_image','product_category_detail','category','discount')->get();
+        return view('user.cart', ['product' => $products, 'category' => $categories]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function store(Request $request){
+        $cek = Cart::where('product_id', '=', $request->product_id)->where('user_id', '=', $request->user_id)->where('status','=','notyet')->first();
+        
+        if(is_null($cek)){
+            $cart = new Cart;
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $cek = Cart::where('user_id', '=', $request->user_id)
-                    ->where('product_id', '=', $request->product_id)
-                    ->where('carts.status', '=', 'notyet')->first();
-        if (is_null($cek)) {
-            $carts = new Cart;
-            $carts->product_id = $request->product_id;
-            $carts->qty = $request->qty;
-            $carts->user_id = $request->user_id;
-            $carts->status = "notyet";
-            $carts->save();
-            return response()->json(['notif' => "sukses menambahkan ke keranjang" ]);
+            $cart->product_id = $request->product_id;
+            $cart->user_id = $request->user_id;
+            $cart->qty = 1;
+            $cart->status = 'notyet';
+            $cart->save();    
         }else{
-           return response()->json(['notif' => "Produk Sudah di keranjang" ]); 
-        }  
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $products = DB::table('carts')
-                    ->join('products', 'products.id', '=', 'carts.product_id')
-                    ->join('users', 'users.id', '=', 'carts.user_id')
-                    ->select('products.*', 'carts.qty', 'carts.id AS cart_id')
-                    ->where('users.id', '=', $id)
-                    ->where('carts.deleted_at', '=', null)
-                    ->where('carts.status', '=', 'notyet')
-                    ->get();
-        $discounts = DB::table('discounts')->select('discounts.*')->get();
-        $images = DB::table('product_images')->select('product_images.*')->get();
-        $count_carts = Cart::where('user_id', '=', Auth::user()->id)->where('carts.status', '=', 'notyet')->count('id');
-        $sub_total = DB::select('SELECT SUM(carts.`qty`*products.`price`) AS subtotal
-                                    FROM carts JOIN products ON products.`id` = carts.`product_id`
-                                    JOIN users ON carts.`user_id` = users.`id`
-                                    WHERE users.`id` =? AND carts.`status`= "notyet"', array($id));
-        return view('user.cart', compact('id', 'products', 'images', 'discounts', 'count_carts', 'sub_total'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'qty' => 'integer',
-        ]);
-        $carts = Cart::find($id);
-        $cek = DB::table('products')->select('products.*')->where('products.id', '=', $carts->product_id)->first();
-        if ($cek->stock < $request->qty) {
-            return redirect()->back()->with(['notif' => 'Maaf Stock Permintaan tidak Mencukupi untuk dipesan.']);
-        }else{
-            $carts->qty = $request->qty;
-            $carts->save();
-            $sub_total = DB::select('SELECT SUM(carts.`qty`*products.`price`) AS subtotal
-                                        FROM carts JOIN products ON products.`id` = carts.`product_id`
-                                        JOIN users ON carts.`user_id` = users.`id`
-                                        WHERE users.`id` =? AND carts.`status`= "notyet"', array($request->user_id));
-            return redirect()->back()->with(['notif' => 'Berhasil Mengupdate Keranjang!']);
+            $cek->product_id = $request->product_id;
+            $cek->user_id = $request->user_id;
+            $cek->qty = $cek->qty + 1;
+            $cek->status = 'notyet';
+            $cek->save();
         }
-        
+
+        $cek1 = Cart::where('user_id', '=', $request->user_id)->where('status','=','notyet')->get();
+        $jumlah = $cek1->count();
+
+        return response()->json(['success' => 'Produk berhasil dimasukkan dalam cart', 'jumlah' => $jumlah]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        
+    public function show(){
+        if(is_null(Auth::user())){
+            return redirect('/login');
+        }else{
+            $id = Auth::user()->id;
+            $cart = Cart::with(['product' => function($q){
+                $q->with('product_image','discount');
+            }])->where('user_id', '=', $id)->where('status', '=', 'notyet')->get();
+
+            return view('user.cart', ['cart'=>$cart]);
+        }
     }
 
-    public function delete($id){
-        $carts = Cart::find($id);
-        $carts->delete();
-        return redirect()->back();
-    }
+    public function update(Request $request){
+        $cart = Cart::find($request->id);
 
-    public function checkout_status($id){
-            $id_cart = DB::table('carts')->select('carts.*')->where('carts.deleted_at', '=', null)
-                    ->where('carts.status', '=', 'notyet')
-                    ->where('user_id', '=', $id)->get();
-            foreach ($id_cart as $cart) {
-                $carts = Cart::find($cart->id);
-                $carts->status = "checkedout";
-                $carts->save();
-            }
-            return redirect('transactions/'.$id);
-        
-    }
-    public function cancel_ceheckout($id){
-        $id_cart = DB::table('carts')->select('carts.*')->where('carts.deleted_at', '=', null)
-                    ->where('carts.status', '=', 'checkedout')
-                    ->where('user_id', '=', $id)->get();
+        if($request->qty == 0){
+            $cart->status = 'cancelled';
+            $cart->save();
+            $carts = Cart::with(['product' => function($q){
+                $q->with('product_image','discount');
+            }])->where('user_id', '=', $request->user_id)->where('status', '=', 'notyet')->get();
+            $hasil = view('recart',['carts' => $carts])->render();
+            $jumlah = $carts->count();
+            return response()->json(['success' => 'berhasil diganti', 'hasil' => $hasil, 'jumlah' => $jumlah]);
+        }else{
+            $cart->qty = $cart->qty+$request->qty;
+            $cart->save();
 
-        foreach ($id_cart as $cart) {
-                $carts = Cart::find($cart->id);
-                $carts->status = "notyet";
-                $carts->save();
-            }
-        return redirect('carts/'.$id);
+            return response()->json(['success' => 'berhasil nambah']);
+        }
     }
 }
