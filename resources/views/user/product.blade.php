@@ -35,7 +35,7 @@
 						<div class="col">
 							<div class="home_content">
 								<div class="home_title">{{$products->product_name}}<span>.</span></div>
-								<div class="home_text"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus. Sed nec molestie eros. Sed viverra velit venenatis fermentum luctus.</p></div>
+								<div class="home_text"><p>Exclusive Sport</p></div>
 							</div>
 						</div>
 					</div>
@@ -290,61 +290,7 @@
 
 	<!-- Products -->
 
-	<div style="background-color: #333333" class="products">
-		<div class="container">
-			<div class="row">
-				<div class="col text-center">
-					<div class="products_title text-light">Related Products</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					
-					<div class="product_grid">
-
-						<!-- Product -->
-						<div class="product">
-							<div class="product_image"><img src="/assets/User/images/product_1.jpg" alt=""></div>
-							<div class="product_extra product_new"><a href="categories.html">New</a></div>
-							<div class="product_content">
-								<div class="product_title text-light"><a class="text-light" href="product.html">Smart Phone</a></div>
-								<div class="product_price text-light">$670</div>
-							</div>
-						</div>
-
-						<!-- Product -->
-						<div class="product">
-							<div class="product_image"><img src="/assets/User/images/product_2.jpg" alt=""></div>
-							<div class="product_extra product_sale"><a href="categories.html">Sale</a></div>
-							<div class="product_content">
-								<div class="product_title text-light"><a class="text-light" href="product.html">Smart Phone</a></div>
-								<div class="product_price text-light">$520</div>
-							</div>
-						</div>
-
-						<!-- Product -->
-						<div class="product">
-							<div class="product_image"><img src="/assets/User/images/product_3.jpg" alt=""></div>
-							<div class="product_content">
-								<div class="product_title text-light"><a class="text-light" href="product.html">Smart Phone</a></div>
-								<div class="product_price text-light">$710</div>
-							</div>
-						</div>
-
-						<!-- Product -->
-						<div class="product">
-							<div class="product_image"><img src="/assets/User/images/product_4.jpg" alt=""></div>
-							<div class="product_content">
-								<div class="product_title text-light"><a class="text-light" href="product.html">Smart Phone</a></div>
-								<div class="product_price text-light">$330</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <script src="{{ asset('assets/User/js/jquery-3.2.1.min.js')}}"></script>

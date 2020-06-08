@@ -56,27 +56,27 @@
 				<!-- Billing Info -->
 				<div class="col-lg-6">
 					<div class="billing checkout_section">
-						<div class="section_title text-light">Billing Address</div>
-						<div class="section_subtitle text-light">Enter your address info</div>
+						<div class="section_title text-light">Alamat Tagihan</div>
+						<div class="section_subtitle text-light">Masukkan Info Alamat Anda</div>
 						<div class="checkout_form_container text-light">
 								<div>
 									<!-- Name -->
-									<label class="text-light" for="checkout_name">Name*</label>
+									<label class="text-light" for="checkout_name">Nama*</label>
 									<input type="text" value="{{Auth::user()->name}}" id="nama" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Email -->
-									<label class="text-light" for="checkout_email">Email Address*</label>
+									<label class="text-light" for="checkout_email">Alamat Email*</label>
 									<input type="email" value="{{Auth::user()->email}}" id="email" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Phone no -->
-									<label class="text-light" for="checkout_phone">Phone no*</label>
+									<label class="text-light" for="checkout_phone">No HP*</label>
 									<input name="no_telp" type="text" id="nomor-telp" class="checkout_input" required="required">
 								</div>
 								<div>
 									<!-- Province -->
-									<label class="text-light" for="checkout_province">Province*</label>
+									<label class="text-light" for="checkout_province">Provinsi*</label>
 									<select name="province" id="provinsi" class="dropdown_item_select checkout_input cekongkir" require="required">
 										<option>Provinsi*</option>
                       @foreach ($provinsi as $prov)
@@ -86,18 +86,18 @@
 								</div>
 								<div>
 									<!-- City / Town -->
-									<label class="text-light" for="checkout_city">City/Town*</label>
+									<label class="text-light" for="checkout_city">Kabupaten/Kota*</label>
 									<select name="regency" id="kota" class="dropdown_item_select checkout_input cekongkir" require="required">
 										<option value=""></option>
 									</select>
 								</div>
 								<div>
 									<!-- Address -->
-									<label class="text-light" for="checkout_address">Address*</label>
+									<label class="text-light" for="checkout_address">Alamat*</label>
 									<input type="text" id="alamat" name="address" class="checkout_input" required="required">
 								</div>
 								<div>
-									<label class="text-light" for="checkout_province">Courier*</label>
+									<label class="text-light" for="checkout_province">Kurir*</label>
 									<select name="courier" id="kurir" class="dropdown_item_select checkout_input cekongkir">
                                         <option>Kurir*</option>
                                         @foreach ($kurir as $k)
@@ -113,18 +113,18 @@
 
 				<div class="col-lg-6">
 					<div class="order checkout_section">
-						<div class="section_title">Your order</div>
-						<div class="section_subtitle">Order details</div>
+						<div class="section_title">Orderan Anda</div>
+						<div class="section_subtitle">Detail Order</div>
 
 						<!-- Order details -->
 						<div class="order_list_container">
 							<ul class="order_list">
 								<li class="d-flex flex-row align-items-center justify-content-start">
-									<div class="order_list_title">Subtotal</div>
+									<div class="order_list_title">Sub Total</div>
 									<div class="order_list_value ml-auto">Rp.{{$subtotal}}</div>
 								</li>
 								<li class="d-flex flex-row align-items-center justify-content-start">
-                  <div class="order_list_title">Shipping</div>
+                  <div class="order_list_title">Ongkir</div>
                   <div class="order_list_value ml-auto" id="biaya-ongkir"></div>
 								</li>
 								<li class="d-flex flex-row align-items-center justify-content-start">
@@ -139,7 +139,7 @@
                   <input type="hidden" name="product_id" value="{{$product_id}}">
 									<input type="hidden" name="qty" value="{{$qty}}">
 									
-									<button type="submit" class="btn btn-primary btn-rounded" id="beli">Proceed</button>
+									<button type="submit" class="btn btn-primary btn-rounded" id="beli">Selesai</button>
 								</li>
 							</ul>
 						</div>
@@ -167,7 +167,7 @@
   
                   <th class="font-weight-bold">
   
-                    <strong>Product</strong>
+                    <strong>Produk</strong>
   
                   </th>
   
@@ -175,7 +175,7 @@
   
                   <th class="font-weight-bold">
   
-                    <strong>Price</strong>
+                    <strong>Harga</strong>
   
                   </th>
   

@@ -41,9 +41,9 @@
 							<div class="row">
 								<div class="col">
 									<div class="home_slider_content"  data-animation-in="fadeIn" data-animation-out="animate-out fadeOut">
-										<div class="home_slider_title">A new Online Shop experience.</div>
-										<div class="home_slider_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus. Sed nec molestie eros. Sed viverra velit venenatis fermentum luctus.</div>
-										<div class="button button_light home_button"><a href="#">Shop Now</a></div>
+										<div class="home_slider_title">Exclusive Sport</div>
+										<div class="home_slider_subtitle">Tempatnya Belanja Sepatu Sport Berkualitas.</div>
+										<div class="button button_light home_button"><a href="#">Belanja Sekarang</a></div>
 									</div>
 								</div>
 							</div>
@@ -59,9 +59,9 @@
 							<div class="row">
 								<div class="col">
 									<div class="home_slider_content"  data-animation-in="fadeIn" data-animation-out="animate-out fadeOut">
-										<div class="home_slider_title">A new Online Shop experience.</div>
-										<div class="home_slider_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus. Sed nec molestie eros. Sed viverra velit venenatis fermentum luctus.</div>
-										<div class="button button_light home_button"><a href="#">Shop Now</a></div>
+										<div class="home_slider_title">Exclusive Sport</div>
+										<div class="home_slider_subtitle">Tempatnya Belanja Sepatu Sport Berkualitas.</div>
+										<div class="button button_light home_button"><a href="#">Belanja Sekarang</a></div>
 									</div>
 								</div>
 							</div>
@@ -77,9 +77,9 @@
 							<div class="row">
 								<div class="col">
 									<div class="home_slider_content"  data-animation-in="fadeIn" data-animation-out="animate-out fadeOut">
-										<div class="home_slider_title">A new Online Shop experience.</div>
-										<div class="home_slider_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus. Sed nec molestie eros. Sed viverra velit venenatis fermentum luctus.</div>
-										<div class="button button_light home_button"><a href="#">Shop Now</a></div>
+										<div class="home_slider_title">Exclusive Sport</div>
+										<div class="home_slider_subtitle">Tempatnya Belanja Sepatu Sport Berkualitas.</div>
+										<div class="button button_light home_button"><a href="#">Belanja Sekarang</a></div>
 									</div>
 								</div>
 							</div>
@@ -112,38 +112,7 @@
 
 	<!-- Ads -->
 
-	<div style="background-color: #333333" class="avds">
-		<div class="avds_container d-flex flex-lg-row flex-column align-items-start justify-content-between">
-			<div class="avds_small">
-				<div class="avds_background" style="background-image:url(assets/User/images/avds_small.jpg)"></div>
-				<div class="avds_small_inner">
-					<div class="avds_discount_container">
-						<img src="{{ asset('assets/User/images/discount.png')}}" alt="">
-						<div>
-							<div class="avds_discount">
-								<div>20<span>%</span></div>
-								<div>Discount</div>
-							</div>
-						</div>
-					</div>
-					<div class="avds_small_content">
-						<div class="avds_title">Smart Phones</div>
-						<div class="avds_link"><a href="categories.html">See More</a></div>
-					</div>
-				</div>
-			</div>
-			<div class="avds_large">
-				<div class="avds_background" style="background-image:url(assets/User/images/avds_large.jpg)"></div>
-				<div class="avds_large_container">
-					<div class="avds_large_content">
-						<div class="avds_title">Professional Cameras</div>
-						<div class="avds_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus. Sed nec molestie eros. Sed viver ra velit venenatis fermentum luctus.</div>
-						<div class="avds_link avds_link_large"><a href="categories.html">See More</a></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
   
 	<!-- Products -->
 	<hr class="mb-5">
@@ -219,22 +188,7 @@
 	<hr class="mb-5">
 
 	<!-- Ad -->
-	<div style="background-color: #333333" class="avds_xl">
-		<div class="container">
-			<div class="row">
-				<div class="col">
-					<div class="avds_xl_container clearfix">
-						<div class="avds_xl_background" style="background-image:url(assets/User/images/avds_xl.jpg)"></div>
-						<div class="avds_xl_content">
-							<div class="avds_title">Amazing Devices</div>
-							<div class="avds_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus.</div>
-							<div class="avds_link avds_xl_link"><a href="categories.html">See More</a></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<!-- Icon Boxes -->
 
 	<div style="background-color: #333333" class="icon_boxes">

@@ -17,7 +17,7 @@
 									<a class="fa fa-bell-o"></a>
 									<a href="/home"><span class="badge badge-pill badge-danger">{{$notif_count}}</span></a>
 									<ul >
-										<center><a href="/marknotif" class="btn" style="background-color: black;">Mark All As Read</a></center>
+										<center><a href="/marknotif" class="btn" style="background-color: black;">Tandai Semua Telah Dibaca</a></center>
 										@foreach($notifications as $notif)
 											<li>{!!$notif->data!!}</li>
 											<br>
@@ -26,11 +26,11 @@
 								</li>
 								@endauth
 								<li class="hassubs active">
-									<a href="/home">Home</a>
+									<a href="/home">Beranda</a>
 									<ul>
 										@auth
 										<li><a href="/cart">Cart</a></li>
-									<li><a href="/transaksi/{{Auth::user()->id}}">Transaction</a></li>
+									<li><a href="/transaksi/{{Auth::user()->id}}">Transaksi</a></li>
 										@endauth
 									</ul>
 								</li>

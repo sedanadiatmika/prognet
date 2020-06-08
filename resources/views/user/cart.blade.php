@@ -31,7 +31,7 @@
                         <div class="home_content">
                             <div class="breadcrumbs">
                                 <ul>
-                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/">Beranda</a></li>
                                     <li><a href="categories.html">Cart</a></li>
                                     <li>Shopping Cart</li>
                                 </ul>
@@ -51,9 +51,9 @@
 				<div class="col">
 					<!-- Column Titles -->
 					<div class="cart_info_columns clearfix">
-						<div class="cart_info_col cart_info_col_product text-light">Product</div>
-						<div class="cart_info_col cart_info_col_price text-light">Price</div>
-						<div class="cart_info_col cart_info_col_quantity text-light">Quantity</div>
+						<div class="cart_info_col cart_info_col_product text-light">Produk</div>
+						<div class="cart_info_col cart_info_col_price text-light">Harga</div>
+						<div class="cart_info_col cart_info_col_quantity text-light">Jumlah</div>
 						<div class="cart_info_col cart_info_col_total text-light">Sub-Total</div>
 					</div>
 				</div>
@@ -132,7 +132,7 @@
 			<div class="row row_cart_buttons">
 				<div class="col">
 					<div class="cart_buttons d-flex flex-lg-row flex-column align-items-start justify-content-start">
-						<div class="button continue_shopping_button"><a class="text-light" href="/home">Continue shopping</a></div>
+						<div class="button continue_shopping_button"><a class="text-light" href="/home">Lanjut Belanja</a></div>
 					</div>
 				</div>
 			</div>
@@ -143,7 +143,7 @@
 
 				<div class="col-lg-6 offset-lg-2">
 					<div class="cart_total">
-						<div class="section_title text-light">Cart total</div>
+						<div class="section_title text-light">Total Cart</div>
 						<div class="section_subtitle text-light">Final info</div>
 						<div class="cart_total_container">
 							<ul>
@@ -160,7 +160,7 @@
                 		@csrf
                     	<input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     	<input type="hidden" name="sub_total" value="{{$total}}">
-                	<button type="submit" class="btn btn-dark">Complete purchase
+                	<button type="submit" class="btn btn-dark">Selesaikan Pembayaran
 						<i class="fa fa-angle-right right"></i>
                   	</button>
                   </form>

@@ -127,7 +127,7 @@
 
                           <h3 class="my-4 pb-2">Rangkuman Pesanan</h3>
                           <br>
-                          <label>Summary</label>
+                          <label>Rangkuman</label>
                           <ul class="text-lg-left list-unstyled ml-4">
 
                             <li>
@@ -168,7 +168,7 @@
                                               @csrf
                                               <input type="hidden" name="id" value="{{$transaksi->id}}">
                                               <input type="hidden" name="status" value="3">
-                                              <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Apa yakin ingin acc pesanan ini?')">Verify</button>
+                                              <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Apa yakin ingin acc pesanan ini?')">Verifikasi</button>
                                             </form>
                                         </div>  
                                     @endif
@@ -179,7 +179,7 @@
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{$transaksi->id}}">
                                                 <input type="hidden" name="status" value="4">
-                                                <button type="submit" class="btn btn-success btn-sm">Deliver Products</button>
+                                                <button type="submit" class="btn btn-success btn-sm">Kirim Barang</button>
                                             </form>
                                         </div>  
                                     @endif
@@ -188,12 +188,12 @@
                                        
                                         @else
                                             <div style="margin-top:10px;" class="d-flex justify-content-center">
-                                                <button id="tombol" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalContactForm">Proof Of Payment</button>
+                                                <button id="tombol" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalContactForm">Bukti Pembayaran</button>
                                             </div>
                                         @endif
 
                                         <div style="margin-top:10px;" class="d-flex justify-content-center">
-                                          <a href="/admin/transaksi"><button class="btn btn-warning btn-rounded">Back</button></a>
+                                          <a href="/admin/transaksi"><button class="btn btn-warning btn-rounded">Kembali</button></a>
                                         </div>
                             </li>
 
@@ -246,7 +246,7 @@
   
                   <th class="font-weight-bold">
   
-                    <strong>Product</strong>
+                    <strong>Produk</strong>
   
                   </th>
   
@@ -258,7 +258,7 @@
   
                   <th class="font-weight-bold">
   
-                    <strong>Price</strong>
+                    <strong>Harga</strong>
   
                   </th>
 

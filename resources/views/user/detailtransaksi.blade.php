@@ -28,8 +28,8 @@
 								<div class="breadcrumbs">
 									<ul>
 										<li><a href="index.html">Home</a></li>
-										<li><a href="cart.html">Transaction</a></li>
-										<li>Transaction Details</li>
+										<li><a href="cart.html">Transaksi</a></li>
+										<li>Detail Transaksi</li>
 									</ul>
 								</div>
 							</div>
@@ -46,41 +46,41 @@
 				<!-- Billing Info -->
 				<div class="col-lg-6">
 					<div class="billing checkout_section">
-						<div class="section_title">Billing Address</div>
-						<div class="section_subtitle">Your address info</div>
+						<div class="section_title">Alamat Tagihan</div>
+						<div class="section_subtitle">Info Alamat Anda</div>
 						<div class="checkout_form_container">
 								<div>
 									<!-- Name -->
-									<label for="checkout_name">Name*</label>
+									<label for="checkout_name">Nama*</label>
 									<input type="text" value="{{Auth::user()->name}}" id="nama" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Email -->
-									<label for="checkout_email">Email Address*</label>
+									<label for="checkout_email">Alamat Email*</label>
 									<input type="email" value="{{Auth::user()->email}}" id="email" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Phone no -->
-									<label for="checkout_phone">Phone no*</label>
+									<label for="checkout_phone">No Telepon*</label>
 									<input type="phone" id="checkout_phone" value="{{$transaksi->telp}}" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Province -->
-									<label for="checkout_province">Province*</label>
+									<label for="checkout_province">Provinsi*</label>
 									<input type="phone" id="checkout_phone" value="{{$transaksi->province}}" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- City / Town -->
-									<label for="checkout_city">City/Town*</label>
+									<label for="checkout_city">Kota/Kabupaten*</label>
 									<input type="phone" id="checkout_phone" value="{{$transaksi->regency}}" class="checkout_input" disabled>
 								</div>
 								<div>
 									<!-- Address -->
-									<label for="checkout_address">Address*</label>
+									<label for="checkout_address">Alamat*</label>
 									<input type="text" id="alamat" name="address" value="{{$transaksi->address}}" class="checkout_input" disabled>
 								</div>
 								<div>
-									<label for="checkout_province">Courier*</label>
+									<label for="checkout_province">Kurir*</label>
 									<input type="text" id="alamat" name="address" value="{{$transaksi->courier->courier}}" class="checkout_input" disabled>
 								</div>
 						</div>
@@ -89,8 +89,8 @@
 				<!-- Order Info -->
 				<div class="col-lg-6">
 					<div class="order checkout_section">
-						<div class="section_title">Your order</div>
-						<div class="section_subtitle">Order Summary</div>
+						<div class="section_title">Orderan Anda</div>
+						<div class="section_subtitle">Detail Order</div>
 						<!-- Order details -->
 						<div class="order_list_container">
 							<ul class="order_list">
@@ -113,7 +113,7 @@
                   <div class="order_list_value ml-auto">Rp.{{$transaksi->sub_total}}</div>
 								</li>
 								<li class="d-flex flex-row align-items-center justify-content-start">
-                  <div class="order_list_title">Shipping</div>
+                  <div class="order_list_title">Ongkir</div>
                   <div class="order_list_value ml-auto" id="biaya-ongkir">Rp{{$transaksi->shipping_cost}}</div>
 								</li>
 								<li class="d-flex flex-row align-items-center justify-content-start">
@@ -121,7 +121,7 @@
 									<div class="order_list_value ml-auto">Rp.{{$transaksi->total}}<span id="total-biaya"></span></div>
                 </li>
                 <li class="d-flex flex-row align-items-center justify-content-start">
-									<div class="order_list_title">Proof Of Payment</div>
+									<div class="order_list_title">Bukti Pembayaran</div>
 									<div class="order_list_value ml-auto">
                     @if (is_null($transaksi->proof_of_payment))
                       Belum di Upload
