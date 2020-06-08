@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v12.5.1 (64 bit)
-MySQL - 8.0.13 : Database - db_paktikum_prognet
+MySQL - 10.1.36-MariaDB : Database - db_paktikum_prognet
 *********************************************************************
 */
 
@@ -21,11 +21,11 @@ USE `db_paktikum_prognet`;
 DROP TABLE IF EXISTS `admin_notifications`;
 
 CREATE TABLE `admin_notifications` (
-  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notifiable_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `notifiable_id` int(10) unsigned NOT NULL,
-  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -54,23 +54,25 @@ DROP TABLE IF EXISTS `admins`;
 
 CREATE TABLE `admins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `profile_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `profile_image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sellers_email_unique` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `admins` */
 
 insert  into `admins`(`id`,`username`,`password`,`name`,`profile_image`,`phone`,`remember_token`,`created_at`,`updated_at`,`status`) values 
-(1,'W@hyu9','$2y$10$FRidXksA19y4YaI6uvNE3eNrTPECQyZ4TLZ/Fjp483EUO1R4oQdQ6','Admin Wahyu','1584276259.png','088236109829','uP6NXozoflzGsXLPbunzBIVYoRON0OrIRzWTLvViASr1WbY9f6BNNTAPH5IC','2020-03-15 12:41:41','2020-03-15 12:41:41',1);
+(1,'W@hyu9','$2y$10$FRidXksA19y4YaI6uvNE3eNrTPECQyZ4TLZ/Fjp483EUO1R4oQdQ6','Admin Wahyu','1584276259.png','088236109829','uP6NXozoflzGsXLPbunzBIVYoRON0OrIRzWTLvViASr1WbY9f6BNNTAPH5IC','2020-03-15 12:41:41','2020-03-15 12:41:41',1),
+(2,'admin11','$2y$10$gESNeqN.PKMCcJORnyQOA.sUlGtSRjyCUROtFlV./5z3Rg3qOQVK6','Admin 11','11.png','112233','',NULL,NULL,1),
+(3,'admindoddy','$2y$10$wrYI3TGXIml1z7jm0A0EH.RgYZYA.hGXnT1UFSfZjJnJHTZwP/sRm','Admin Doddy','doddy.png','1122334455',NULL,NULL,NULL,NULL);
 
 /*Table structure for table `carts` */
 
@@ -83,14 +85,14 @@ CREATE TABLE `carts` (
   `qty` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `status` enum('checkedout','notyet','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('checkedout','notyet','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `carts` */
 
@@ -138,7 +140,8 @@ insert  into `carts`(`id`,`user_id`,`product_id`,`qty`,`created_at`,`updated_at`
 (55,1,37,1,'2020-05-25 02:53:21','2020-05-25 02:53:38','cancelled',NULL),
 (56,1,35,1,'2020-05-26 05:31:04','2020-05-26 13:31:22','checkedout',NULL),
 (57,1,12,1,'2020-05-26 06:44:03','2020-05-26 14:44:53','checkedout',NULL),
-(58,1,15,1,'2020-05-26 06:44:23','2020-05-26 14:44:53','checkedout',NULL);
+(58,1,15,1,'2020-05-26 06:44:23','2020-05-26 14:44:53','checkedout',NULL),
+(59,8,12,1,'2020-06-05 05:26:58','2020-06-05 05:26:58','notyet',NULL);
 
 /*Table structure for table `cities` */
 
@@ -666,19 +669,20 @@ DROP TABLE IF EXISTS `couriers`;
 CREATE TABLE `couriers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `courier` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `courier` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `couriers` */
 
 insert  into `couriers`(`id`,`code`,`courier`,`created_at`,`updated_at`,`deleted_at`) values 
 (1,'jne','JNE','2020-04-05 01:47:02','2020-04-25 17:48:25',NULL),
 (2,'pos','POS','2020-05-22 22:29:11','2020-05-22 22:29:13',NULL),
-(3,'tiki','TIKI','2020-05-22 22:32:39','2020-05-22 22:32:40',NULL);
+(3,'tiki','TIKI','2020-05-22 22:32:39','2020-05-22 22:32:40',NULL),
+(6,NULL,'JNT','2020-06-06 15:13:09','2020-06-06 15:13:09',NULL);
 
 /*Table structure for table `discounts` */
 
@@ -696,7 +700,7 @@ CREATE TABLE `discounts` (
   PRIMARY KEY (`id`),
   KEY `id_product` (`id_product`),
   CONSTRAINT `discounts_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 /*Data for the table `discounts` */
 
@@ -712,7 +716,7 @@ DROP TABLE IF EXISTS `migrations`;
 
 CREATE TABLE `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -747,8 +751,8 @@ insert  into `migrations`(`id`,`migration`,`batch`) values
 DROP TABLE IF EXISTS `password_resets`;
 
 CREATE TABLE `password_resets` (
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -761,26 +765,20 @@ DROP TABLE IF EXISTS `product_categories`;
 
 CREATE TABLE `product_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `category_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `product_categories` */
 
 insert  into `product_categories`(`id`,`category_name`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'Kamera','2020-04-05 01:52:07','2020-04-05 01:52:09',NULL),
-(2,'Aksesoris Kamera','2020-04-07 23:41:33','2020-04-07 23:41:36',NULL),
-(3,'Laptop','2020-04-24 06:28:03','2020-04-24 06:28:05',NULL),
-(4,'Handphone','2020-04-25 08:21:11','2020-04-25 08:21:16',NULL),
-(5,'Aksesoris Handphone','2020-04-25 08:21:13','2020-04-25 08:21:18',NULL),
-(6,'Aksesoris Laptop','2020-04-25 08:48:02','2020-04-25 08:48:04',NULL),
-(7,'Gaming','2020-04-25 08:49:23','2020-04-25 08:49:25',NULL),
-(8,'Notebook','2020-04-25 08:49:35','2020-04-25 08:49:37',NULL),
 (9,'Professional','2020-04-25 08:50:16','2020-04-25 08:50:19',NULL),
-(11,'Penghuni Trash','2020-04-25 16:50:42','2020-04-25 16:51:49','2020-04-25 16:51:49');
+(12,'Olahraga','2020-06-06 15:08:53','2020-06-06 15:08:53',NULL),
+(13,'Lifestyle','2020-06-06 15:10:13','2020-06-06 15:10:13',NULL),
+(14,'Aksesoris Sepak bola','2020-06-06 15:10:27','2020-06-06 15:12:02',NULL);
 
 /*Table structure for table `product_category_details` */
 
@@ -797,45 +795,16 @@ CREATE TABLE `product_category_details` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `product_category_details_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `product_category_details_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=latin1;
 
 /*Data for the table `product_category_details` */
 
 insert  into `product_category_details`(`id`,`product_id`,`category_id`,`created_at`,`updated_at`) values 
-(8,5,1,'2020-04-12 23:42:08','2020-04-12 23:42:04'),
-(9,6,1,'2020-04-12 23:45:06','2020-04-12 23:45:04'),
-(10,7,1,'2020-04-12 23:45:10','2020-04-12 23:45:15'),
-(11,8,1,'2020-04-13 00:43:14','2020-04-13 00:43:16'),
-(12,9,1,'2020-04-13 00:43:22','2020-04-13 00:43:24'),
-(14,13,2,'2020-04-12 19:01:59','2020-04-12 19:01:59'),
-(15,14,2,'2020-04-12 19:45:27','2020-04-12 19:45:27'),
-(16,11,1,'2020-04-13 03:51:18','2020-04-13 03:51:21'),
-(19,17,2,'2020-04-12 20:34:14','2020-04-12 20:34:14'),
-(20,18,2,'2020-04-12 20:40:11','2020-04-12 20:40:11'),
-(21,19,1,'2020-04-13 05:10:51','2020-04-12 21:10:51'),
-(22,20,2,'2020-04-13 10:21:08','2020-04-13 10:21:08'),
-(23,21,2,'2020-04-13 10:43:29','2020-04-13 10:43:29'),
-(24,22,2,'2020-04-13 10:44:48','2020-04-13 10:44:48'),
-(26,25,2,'2020-04-13 16:05:04','2020-04-13 16:05:04'),
-(27,28,2,'2020-04-14 00:27:53','2020-04-13 16:27:53'),
-(28,29,1,'2020-04-13 16:36:57','2020-04-13 16:36:57'),
-(65,1,4,'2020-04-25 00:48:35','2020-04-25 00:48:35'),
-(68,37,3,'2020-04-25 00:51:15','2020-04-25 00:51:15'),
-(69,37,7,'2020-04-25 00:51:15','2020-04-25 00:51:15'),
-(70,36,3,'2020-04-25 00:51:26','2020-04-25 00:51:26'),
-(71,36,7,'2020-04-25 00:51:26','2020-04-25 00:51:26'),
-(72,35,3,'2020-04-25 00:51:40','2020-04-25 00:51:40'),
-(73,35,7,'2020-04-25 00:51:40','2020-04-25 00:51:40'),
-(74,15,4,'2020-04-25 00:51:56','2020-04-25 00:51:56'),
-(75,12,4,'2020-04-25 00:52:20','2020-04-25 00:52:20'),
-(76,3,6,'2020-04-25 00:52:33','2020-04-25 00:52:33'),
-(77,3,7,'2020-04-25 00:52:33','2020-04-25 00:52:33'),
-(83,41,3,'2020-04-25 22:31:43','2020-04-25 22:31:43'),
-(84,41,7,'2020-04-25 22:31:44','2020-04-25 22:31:44'),
-(85,38,3,'2020-04-25 22:32:02','2020-04-25 22:32:02'),
-(86,38,7,'2020-04-25 22:32:02','2020-04-25 22:32:02'),
-(87,42,3,'2020-04-29 06:48:50','2020-04-29 06:48:50'),
-(88,42,7,'2020-04-29 06:48:50','2020-04-29 06:48:50');
+(89,43,9,'2020-06-06 14:54:28','2020-06-06 14:54:28'),
+(90,44,9,'2020-06-06 14:55:48','2020-06-06 14:55:48'),
+(91,45,9,'2020-06-06 15:00:43','2020-06-06 15:00:43'),
+(92,46,9,'2020-06-06 15:01:13','2020-06-06 15:01:13'),
+(94,48,9,'2020-06-06 15:08:32','2020-06-06 15:08:32');
 
 /*Table structure for table `product_images` */
 
@@ -844,13 +813,13 @@ DROP TABLE IF EXISTS `product_images`;
 CREATE TABLE `product_images` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
-  `image_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `product_images` */
 
@@ -870,7 +839,12 @@ insert  into `product_images`(`id`,`product_id`,`image_name`,`created_at`,`updat
 (75,15,'1589328883_uploaded_a989d786d8e456773e216569d81612aa.jpg','2020-05-13 00:14:43','2020-05-13 00:14:43'),
 (76,15,'1589328883_uploaded_bb73ce25fb2630cccbea106a60274f93.jpg','2020-05-13 00:14:43','2020-05-13 00:14:43'),
 (78,15,'1589329041_be54201b7851b2f02bdbb66c76c61fec.jpg','2020-05-13 00:17:21','2020-05-13 00:17:21'),
-(79,3,'1589328096_g502-lightspeed-gallery-1.webp','2020-05-15 23:15:10','2020-05-15 23:15:10');
+(79,3,'1589328096_g502-lightspeed-gallery-1.webp','2020-05-15 23:15:10','2020-05-15 23:15:10'),
+(80,43,'1591455268_sepatu-nike-cortez.jpg','2020-06-06 14:54:28','2020-06-06 14:54:28'),
+(81,44,'1591455348_adidas.jpg','2020-06-06 14:55:48','2020-06-06 14:55:48'),
+(82,46,'1591455673_jersey sepeda.jpg','2020-06-06 15:01:13','2020-06-06 15:01:13'),
+(83,47,'1591455987_pelindung kaki.jpg','2020-06-06 15:06:27','2020-06-06 15:06:27'),
+(84,48,'1591456112_puma.jpg','2020-06-06 15:08:32','2020-06-06 15:08:32');
 
 /*Table structure for table `product_reviews` */
 
@@ -881,7 +855,7 @@ CREATE TABLE `product_reviews` (
   `product_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `rate` int(1) NOT NULL,
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
@@ -914,9 +888,9 @@ DROP TABLE IF EXISTS `products`;
 
 CREATE TABLE `products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` int(11) NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `product_rate` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -924,39 +898,27 @@ CREATE TABLE `products` (
   `weight` int(3) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `products` */
 
 insert  into `products`(`id`,`product_name`,`price`,`description`,`product_rate`,`created_at`,`updated_at`,`stock`,`weight`,`deleted_at`) values 
-(1,'HP Oppo',1500000,'Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower',1,'2020-04-02 04:02:10','2020-05-22 01:10:15',0,1,NULL),
-(2,'Leptop MSI',10000,'Mantap, terlalu op buat push reng',5,'2020-04-02 16:27:29','2020-04-24 22:19:31',1,1,'2020-04-24 22:19:31'),
-(3,'Mouse Logitech G65',500000,'Asik',5,'2020-04-04 01:45:00','2020-05-24 11:14:53',0,1,NULL),
-(5,'Sepatu',10000,'Asoy',0,'2020-04-04 01:49:54','2020-04-24 22:19:38',1,1,'2020-04-24 22:19:38'),
-(6,'Dompet',10000,'wow',0,'2020-04-04 01:59:55','2020-04-24 22:19:43',1,1,'2020-04-24 22:19:43'),
-(7,'Ikat Pinggang',10000,'Yeah',0,'2020-04-04 02:01:13','2020-04-24 22:19:25',1,1,'2020-04-24 22:19:25'),
-(8,'Kalung',1000,'Wow',0,'2020-04-03 18:23:45','2020-04-12 20:59:23',1,1,'2020-04-12 20:59:23'),
-(9,'Gunting Kuku',12000,'Wow, ini sangat berguna',0,'2020-04-03 18:46:37','2020-04-12 20:40:52',12,100,'2020-04-12 20:40:52'),
-(11,'Planga Plongo',10000,'ngutang teros, kapan negara ini maju',0,'2020-04-07 13:28:10','2020-04-24 22:19:20',69,700,'2020-04-24 22:19:20'),
-(12,'Samsung Galaxy S10',12000000,'keren ajah',1,'2020-04-12 18:13:07','2020-05-26 06:45:36',76,100,NULL),
-(13,'Barang',12000,'wah',0,'2020-04-12 19:01:59','2020-04-12 20:32:42',12,120,'2020-04-12 20:32:42'),
-(14,'Batu',10000,'Keras',0,'2020-04-12 19:45:24','2020-04-12 20:16:22',12,12,'2020-04-12 20:16:22'),
-(15,'Apple Iphone 6 Plus',9000000,'Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower berperisai',4,'2020-04-12 20:08:10','2020-05-26 06:45:36',8,200,NULL),
-(17,'dummy',12,'dummy product',0,'2020-04-12 20:34:14','2020-04-12 20:34:32',12,12,'2020-04-12 20:34:32'),
-(18,'dummy123',2000,'dummy product',0,'2020-04-12 20:40:11','2020-04-12 20:40:20',12,120,'2020-04-12 20:40:20'),
-(19,'test product 123',12000,'test',0,'2020-04-12 21:10:19','2020-04-12 21:55:07',12,120,'2020-04-12 21:55:07'),
-(20,'testmulti123',12000,'wah',0,'2020-04-13 10:21:07','2020-04-13 10:41:09',1,1,'2020-04-13 10:41:09'),
-(21,'punten',10000,'wow',0,'2020-04-13 10:43:29','2020-04-13 10:44:30',12,120,'2020-04-13 10:44:30'),
-(22,'slur',123000,'wow',0,'2020-04-13 10:44:48','2020-04-24 22:19:15',12,12,'2020-04-24 22:19:15'),
-(25,'Ampas kuda',10000,'dummy product',0,'2020-04-13 16:05:04','2020-04-13 16:10:39',123,120,'2020-04-13 16:10:39'),
-(28,'8ummy 800',120000,'dummy product',0,'2020-04-13 16:27:53','2020-04-13 16:37:50',123,100,'2020-04-13 16:37:50'),
-(29,'Kalung emas',123000,'wah',0,'2020-04-13 16:36:57','2020-04-27 13:41:10',123,100,'2020-04-27 13:41:10'),
-(35,'MSI GL 65 Leopard',20000000,'wow',5,'2020-04-24 21:34:57','2020-05-26 05:32:05',10,12,NULL),
-(36,'MSI GF 73',15000000,'dummy product',0,'2020-04-24 22:02:24','2020-04-25 00:51:26',0,120,NULL),
-(37,'MSI Titan 75',20000000,'dummy product wow mantap',5,'2020-04-24 22:05:51','2020-05-24 18:33:50',9,100,NULL),
-(38,'MSI Titan 76',200000000,'wow mntap anjing',0,'2020-04-24 22:33:00','2020-04-25 22:32:02',123,100,NULL),
-(41,'Acer Predator',20000000,'wow',3,'2020-04-25 22:31:43','2020-05-25 02:40:03',0,45,NULL),
-(42,'Asus TUF',15000000,'wow keren njir',1,'2020-04-29 06:48:50','2020-05-24 21:25:16',0,200,NULL);
+(1,'HP Oppo',1500000,'Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower, Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower',1,'2020-04-02 04:02:10','2020-06-06 15:07:12',0,1,'2020-06-06 15:07:12'),
+(3,'Mouse Logitech G65',500000,'Asik',5,'2020-04-04 01:45:00','2020-06-06 15:07:08',0,1,'2020-06-06 15:07:08'),
+(12,'Samsung Galaxy S10',12000000,'keren ajah',1,'2020-04-12 18:13:07','2020-06-06 15:07:05',76,100,'2020-06-06 15:07:05'),
+(15,'Apple Iphone 6 Plus',9000000,'Fitur Mantap, Bisa buat menumbangkan negara adidaya superpower berperisai',4,'2020-04-12 20:08:10','2020-06-06 15:07:00',8,200,'2020-06-06 15:07:00'),
+(35,'MSI GL 65 Leopard',20000000,'wow',5,'2020-04-24 21:34:57','2020-06-06 15:06:55',10,12,'2020-06-06 15:06:55'),
+(36,'MSI GF 73',15000000,'dummy product',0,'2020-04-24 22:02:24','2020-06-06 15:06:52',0,120,'2020-06-06 15:06:52'),
+(37,'MSI Titan 75',20000000,'dummy product wow mantap',5,'2020-04-24 22:05:51','2020-06-06 15:06:48',9,100,'2020-06-06 15:06:48'),
+(38,'MSI Titan 76',200000000,'wow mntap anjing',0,'2020-04-24 22:33:00','2020-06-06 15:06:44',123,100,'2020-06-06 15:06:44'),
+(41,'Acer Predator',20000000,'wow',3,'2020-04-25 22:31:43','2020-06-06 15:06:40',0,45,'2020-06-06 15:06:40'),
+(42,'Asus TUF',15000000,'wow keren njir',1,'2020-04-29 06:48:50','2020-06-06 15:06:35',0,200,'2020-06-06 15:06:35'),
+(43,'Sepatu Nike',500000,'Sepatu Nike paling gaul',0,'2020-06-06 14:54:28','2020-06-06 14:54:28',3,800,NULL),
+(44,'Sepatu Adidas',450000,'Sepatu sport adidas',0,'2020-06-06 14:55:48','2020-06-06 14:55:48',3,800,NULL),
+(45,'Jersey Futsal',250000,'Baju jersey yang digunakan untuk bermain futsal',0,'2020-06-06 15:00:43','2020-06-06 15:01:20',5,70,'2020-06-06 15:01:20'),
+(46,'Jersey sepeda',250000,'Baju jersey yang digunakan untuk bersepeda',0,'2020-06-06 15:01:13','2020-06-06 15:01:13',5,70,NULL),
+(47,'pelindung kaki',250000,'Melindungi tulang kering, untuk sepak bola',0,'2020-06-06 15:06:27','2020-06-06 15:06:27',5,50,NULL),
+(48,'Sepatu puma',450000,'Sepatu puma stylish',0,'2020-06-06 15:08:32','2020-06-06 15:08:32',3,70,NULL);
 
 /*Table structure for table `provinces` */
 
@@ -1091,18 +1053,18 @@ DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `timeout` datetime NOT NULL,
-  `address` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `regency` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `regency` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `province` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total` double(12,2) NOT NULL,
   `shipping_cost` double(12,2) NOT NULL,
   `sub_total` double(12,2) NOT NULL,
   `user_id` int(20) unsigned NOT NULL,
   `courier_id` int(10) unsigned NOT NULL,
-  `proof_of_payment` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `proof_of_payment` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `status` enum('unverified','verified','delivered','success','expired','canceled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('unverified','verified','delivered','success','expired','canceled') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `telp` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `courier_id` (`courier_id`),
@@ -1138,11 +1100,11 @@ insert  into `transactions`(`id`,`timeout`,`address`,`regency`,`province`,`total
 DROP TABLE IF EXISTS `user_notifications`;
 
 CREATE TABLE `user_notifications` (
-  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notifiable_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `notifiable_id` int(11) unsigned NOT NULL,
-  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1178,19 +1140,19 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `profile_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `profile_image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
@@ -1199,7 +1161,41 @@ insert  into `users`(`id`,`name`,`email`,`profile_image`,`status`,`email_verifie
 (2,'Depunk','depunk@gmail.com','1585828914.png','Sudah Terdaftar','2020-04-02 20:01:11','$2y$10$nXA62Gtv4baiBqzOkFp6F.NLcKTi9AxnJBjr7A02l3ucpPuP0AGzG',NULL,'2020-04-02 11:58:44','2020-04-02 12:01:59',NULL),
 (4,'Wayan','wayan@gmail','1586195719.jpg','Sudah Terdaftar','2020-04-06 17:55:02','$2y$10$IHEsZlqz45VGLxqLTU5cjO9p7QGLCbTUK3yVCFNi5TQLJnrr4tx12',NULL,'2020-04-06 17:54:50','2020-04-06 17:55:19',NULL),
 (6,'Punten','punten@gmail.com','def.png','Sudah Terdaftar','2020-04-06 18:11:38','$2y$10$4S..fn4v1u8DrsMcQY5agu2uvCZmdNLMXe8vFdKhJWkZWs.wykGvW',NULL,'2020-04-06 18:11:09','2020-04-06 18:11:38',NULL),
-(7,'Test','tes@gmail.com','def.png','Sudah Terdaftar','2020-04-06 18:16:56','$2y$10$LqZfEyLQsPzeO4uC6PYk2u/JlTGHKlW4TDRuej2A9CY1fUybkKRTu',NULL,'2020-04-06 18:16:16','2020-04-06 18:16:56',NULL);
+(7,'Test','tes@gmail.com','def.png','Sudah Terdaftar','2020-04-06 18:16:56','$2y$10$LqZfEyLQsPzeO4uC6PYk2u/JlTGHKlW4TDRuej2A9CY1fUybkKRTu',NULL,'2020-04-06 18:16:16','2020-04-06 18:16:56',NULL),
+(8,'Ngurah Doddy','ngurahdoddy@gmail.com','def.png','Sudah Terdaftar','2020-06-05 05:24:35','$2y$10$C8vFDNcaQX.L2lWFAQy9Xe8Bgyf/sASrQRVLMdyVrORzbEnK1t4ve',NULL,'2020-06-05 05:24:12','2020-06-05 05:24:35',NULL),
+(9,'Cicakkuda','cicakkuda@mail.com','def.png','Sudah Terdaftar','2020-06-06 15:15:29','$2y$10$LTLojQ9ryTZDO9zauAyMPuI8yTPkm8bAyFc/ohFjCXrOvtxCYP7B6',NULL,'2020-06-06 15:14:06','2020-06-06 15:15:29',NULL);
+
+/*!50106 set global event_scheduler = 1*/;
+
+/* Event structure for event `transaksi` */
+
+/*!50106 DROP EVENT IF EXISTS `transaksi`*/;
+
+DELIMITER $$
+
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `transaksi` ON SCHEDULE EVERY 1 SECOND STARTS '2000-01-01 15:21:16' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+	declare tgl_now date default curdate();
+	declare max_id int default (select count(transactions.`id`) from transactions);
+	declare i int default 1;
+	declare status varchar(100);
+	declare tempo datetime;
+	declare tempo_time time;
+	
+	while i <= max_id do
+		set status:=(select transactions.`status` from transactions where transactions.`id` = i);
+		set tempo:=(select transactions.`timeout` from transactions where transactions.`id` =i);	
+			if status = "unverified" then
+				if datediff(tempo,tgl_now) <= 0 then
+					set tempo_time :=(select time(tempo));
+						if (timediff(tempo_time,time(now())) <= 0) then
+						update transactions set transactions.`status` = "expired" where transactions.`id` = i;
+						end if;
+				end if;
+			end if;
+		set i = i + 1;
+	end while;
+end */$$
+DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
